@@ -3,17 +3,26 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-const state = {
-  client: {},
+const moduleState = {
+  client: {
+    bulbs: [
+      1,
+      2,
+      3,
+    ],
+  },
 };
 
-const getters = {
-  getBulbs: () => [],
+const moduleGetters = {
+  getBulbs: ({ state }) => {
+    const [...returnValue] = state.client.bulbs;
+    return returnValue;
+  },
   getScenes: () => [],
   getSchedules: () => [],
 };
 
-const actions = {
+const moduleActions = {
   init: () => {},
 };
 
@@ -22,8 +31,8 @@ const mutations = {
 };
 
 export default new Vuex.Store({
-  state,
-  getters,
-  actions,
+  moduleState,
+  moduleGetters,
+  moduleActions,
   mutations,
 });
