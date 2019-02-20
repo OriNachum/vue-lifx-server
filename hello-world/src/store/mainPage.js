@@ -15,15 +15,26 @@ const moduleState = {
 
 const moduleGetters = {
   getBulbs: ({ state }) => {
-    const [...returnValue] = state.client.bulbs;
-    return returnValue;
+    const [...returnValue] = [
+      1,
+      2,
+      3,
+    ]; // state.client.bulbs;
+    return () => () => returnValue;
   },
-  getScenes: () => [],
-  getSchedules: () => [],
+
+  getScenes() {
+    return () => { };
+  },
+
+  getSchedules() {
+    return () => { };
+  },
 };
 
 const moduleActions = {
-  init: () => {},
+  init() {
+  },
 };
 
 const mutations = {
@@ -31,8 +42,8 @@ const mutations = {
 };
 
 export default new Vuex.Store({
-  moduleState,
-  moduleGetters,
-  moduleActions,
+  state: moduleState,
+  getters: moduleGetters,
+  actions: moduleActions,
   mutations,
 });

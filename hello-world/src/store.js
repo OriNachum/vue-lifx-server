@@ -5,6 +5,7 @@ import mainPage from './store/mainPage';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  namespaced: true,
   modules: {
     mainPage,
   },
