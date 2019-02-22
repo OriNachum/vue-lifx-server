@@ -1,7 +1,7 @@
 <template>
   <div class="main-page">
     <ul class="bulbs">
-      <li v-for="bulb in getBulbs()" :key="bulb.id">
+      <li v-for="bulb in getBulbs" :key="bulb.id">
         {{ bulb }}
       </li>
     </ul>
@@ -11,21 +11,28 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from 'vuex';
+import { INIT, GET_BULBS } from '@/modules/mainPage';
 
 export default {
   name: 'mainPage',
-  created: () => {
- //   init();
+  data() {
+    return {
+
+    };
   },
   computed: {
     ...mapGetters({
-      getBulbs: 'getBulbs',
+      getBulbs: GET_BULBS,
     }),
   },
-  actions: {
-    ...mapActions('mainPage', {
-      init: 'init',
+
+  methods: {
+    ...mapActions({
+      init: INIT,
     }),
+  },
+  async mounted() {
+    await this.init();
   },
 };
 </script>
