@@ -2,70 +2,82 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import lifxClientApi from '@/services/lifxClientApi';
 
-const moduleName = 'mainPage';
-const GET_BULBS_LOCAL = 'GET_BULBS';
-const GET_SCENES_LOCAL = 'GET_SCENES';
-const GET_SCHEDULES_LOCAL = 'GET_SCHEDULES';
-const GET_DEBUG_INFO_LOCAL = 'GET_DEBUG_INFO';
-export const INIT_LOCAL = 'INIT';
-
-export const GET_DEBUG_INFO = `${moduleName}/${GET_DEBUG_INFO_LOCAL}`;
-export const GET_BULBS = `${moduleName}/${GET_BULBS_LOCAL}`;
-export const GET_SCENES = `${GET_SCENES_LOCAL}`;
-export const GET_SCHEDULES = `${GET_SCHEDULES_LOCAL}`;
-export const INIT = `${moduleName}/${INIT_LOCAL}`;
+export const moduleName = 'mainPage';
+export const GET_BULBS = 'GET_BULBS';
+export const GET_SCENES = 'GET_SCENES';
+export const GET_SCHEDULES = 'GET_SCHEDULES';
+export const GET_LOADING = 'GET_LOADING';
+export const INIT = 'INIT';
+export const TOGGLE_BULB = 'TOGGLE_BULB';
+export const REFRESH_BULBS = 'REFRESH_BULBS';
+export const GET_LAST_ACTION_RESPONSE = 'GET_LAST_ACTION_RESPONSE';
 
 const moduleState = {
   debugInfo: '',
   bulbs: [
-    1,
-    2,
-    3,
   ],
   scenes: [
-    1,
   ],
   schedules: [
-    1,
   ],
+  loading: false,
+  lastActionResponse: { responseType: { }, responseData: { } },
 };
 
 const getters = {
-  [GET_DEBUG_INFO_LOCAL]: state => () => state.debugInfo,
-  [GET_BULBS_LOCAL]: state => () => [...state.bulbs],
-
-  [GET_SCENES_LOCAL]: state => () => [...state.scenes],
-
-  [GET_SCHEDULES_LOCAL]: state => () => [...state.schedules],
+  [GET_BULBS]: state => () => [...state.bulbs],
+  [GET_SCENES]: state => () => [...state.scenes],
+  [GET_SCHEDULES]: state => () => [...state.schedules],
+  [GET_LOADING]: state => () => state.loading,
+  [GET_LAST_ACTION_RESPONSE]: state => () => {
+    const { lastActionResponse } = state;
+    return lastActionResponse;
+  },
 };
 
 const actions = {
-  [INIT_LOCAL]: ({ commit }) => {
-    const debugInfo = lifxClientApi.getDebugInfo();
-    commit('setDebugInfo', debugInfo);
-    const lightsPromise = lifxClientApi.verifyLights();
-    if (lightsPromise) {
-      lightsPromise.then(({ lights }) => {
-        if (lights) {
-          commit('resetBulbs');
-          lights.forEach((bulb) => {
-            commit('addBulb', bulb);
+  [REFRESH_BULBS]: ({ commit }) => {
+    commit('setLoading', { loading: true });
+    lifxClientApi.refreshBulbsAsync()
+      .then(() => {
+        lifxClientApi.getBulbsAsync()
+          .then((response) => {
+            const { responseType, responseData } = response;
+            let bulbs = [];
+            if (responseType === 0) {
+              bulbs = JSON.parse(responseData);
+            }
+
+            commit('resetBulbs', { bulbs });
+            commit('setLastActionResponse', { responseType, responseData });
           });
-        }
+      }).finally(() => {
+        commit('setLoading', { loading: false });
       });
-    }
+  },
+  [TOGGLE_BULB]: ({ commit }, bulb) => {
+    commit('setLoading', { loading: true });
+    let label = '';
+    label = bulb.Label;
+    lifxClientApi.toggleBulbAsync(label)
+      .then((response) => {
+        const { responseType, responseData } = response;
+        commit('setLastActionResponse', { responseType, responseData });
+      }).finally(() => {
+        commit('setLoading', { loading: false });
+      });
   },
 };
 
 const mutations = {
-  resetBulbs(state) {
-    state.bulbs.clear();
+  resetBulbs(state, { bulbs }) {
+    Vue.set(state, 'bulbs', bulbs);
   },
-  addBulb(state, { bulb }) {
-    state.bulbs.push(bulb);
+  setLoading(state, { loading }) {
+    Vue.set(state, 'loading', loading);
   },
-  setDebugInfo(state, debugInfo) {
-    state.debugInfo = debugInfo;
+  setLastActionResponse(state, { responseType, responseData }) {
+    Vue.set(state, 'lastActionResponse', { responseType, responseData });
   },
 };
 
