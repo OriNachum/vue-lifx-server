@@ -17,8 +17,10 @@
         </div>
         <div v-else>
           <div v-for="bulb in getBulbs()" :key="bulb.Label">
-            <div @click="toggleBulb(bulb)">
-              {{ bulb }}
+            <!-- Add this when adding routing to bulb page<div @click="toggleBulb(bulb)">-->
+            <div>
+              <light-bulb :bulb="bulb">
+              </light-bulb>
             </div>
           </div>
         </div>
@@ -29,6 +31,7 @@
 
 <script>
 // @ is an alias to /src
+import LightBulb from '@/components/LightBulb.vue';
 import { mapGetters, mapActions } from 'vuex';
 import {
   moduleName,
@@ -45,6 +48,9 @@ export default {
     return {
 
     };
+  },
+  components: {
+    LightBulb,
   },
   computed: {
     ...mapGetters(moduleName, {
