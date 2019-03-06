@@ -21,8 +21,7 @@
         <div class="bulbs">
           <div v-for="bulb in getBulbs()" :key="bulb.label">
             <!--<router-link :to="{ name:'bulbPage', path:`/${bulb.label}`, params: { label: bulb.label } }">-->
-            <router-link to="/bulb/Television">
-            <!--<div @click="routeToBulbPage(bulb)"> -->
+            <router-link :to="{ name: 'bulb', params: { bulb } }">
               <bulb :bulb="bulb">
               </bulb>
             <!--</div>-->

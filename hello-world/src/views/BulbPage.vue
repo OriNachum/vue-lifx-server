@@ -1,8 +1,8 @@
 <template>
   <div id="bulb-page" class='bulb-page'>
     BULB PAGE:
-    <div v-if="label">
-      {{ label }}
+    <div v-if="bulb && bulb.label">
+      {{ bulb.label }}
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ import {
 
 export default {
   name: 'bulbPage',
-  props: ['label'],
+  props: ['bulb'],
   data() {
     return {
     };
