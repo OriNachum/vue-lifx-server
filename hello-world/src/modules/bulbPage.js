@@ -72,8 +72,7 @@ const actions = {
   },
   [TOGGLE_BULB]: ({ commit }, bulb) => {
     commit('setLoading', { loading: true });
-    let label = '';
-    label = bulb.Label;
+    const { label } = bulb;
     lifxClientApi.toggleBulbAsync(label)
       .then((response) => {
         const { responseType, responseData } = response;

@@ -3,6 +3,7 @@
     BULB PAGE:
     <div v-if="bulb && bulb.label">
       {{ bulb.label }}
+      <div @click="toggleBulb(bulb)">Toggle</div>
     </div>
   </div>
 </template>
@@ -21,7 +22,21 @@ import {
 
 export default {
   name: 'bulbPage',
-  props: ['bulb'],
+  props: {
+    bulb: {
+      address: '0.0.0.0',
+      brightness: '1',
+      colorHue: '38',
+      colorSaturation: '0',
+      label: 'label',
+      lastVerifiedState: 'none',
+      power: '0',
+      product: '0',
+      stateVerificationTimeUtc: 'now',
+      temperature: '3500',
+      version: '1',
+    },
+  },
   data() {
     return {
     };
