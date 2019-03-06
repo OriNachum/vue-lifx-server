@@ -1,29 +1,45 @@
 import axios from 'axios';
 
 axios.defaults.withCredentials = false;
+
+// const httsAgent = axios. new https.Agent({ rejectUnauthorized: false });
+
+/*
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+  cert: fs.readFileSync("./usercert.pem"),
+  key: fs.readFileSync("./key.pem"),
+  passphrase: "YYY"
+})
+*/
+
 const sites = {
   dev: 'https://localhost:44370/',
-  deviis: 'http://localhost/LifxLanWebApi/',
+  devIisDebug: 'https://localhost:5001/',
+  devIis: 'https://localhost/LifxWebApi/',
 };
 
+const { devIis: activeSite } = sites;
+
 const urls = {
-  getBulbs: `${sites.dev}Lifx/Api/GetBulbs`,
-  reset: `${sites.dev}Lifx/Api/Reset`,
-  toggleBulb: `${sites.dev}Lifx/Api/Toggle`,
-  refreshBulbs: `${sites.dev}Lifx/Api/Refresh`,
-  off: `${sites.dev}Lifx/Api/Off`,
-  on: `${sites.dev}Lifx/Api/On`,
-  setBrightness: `${sites.dev}Lifx/Api/Brightness`,
-  setColor: `${sites.dev}Lifx/Api/Color`,
-  setLabel: `${sites.dev}Lifx/Api/Label`,
-  setPower: `${sites.dev}Lifx/Api/Power`,
-  setTemperature: `${sites.dev}Lifx/Api/Temperature`,
+  getBulbs: `${activeSite}Lifx/Api/GetBulbs`,
+  reset: `${activeSite}Lifx/Api/Reset`,
+  toggleBulb: `${activeSite}Lifx/Api/Toggle`,
+  refreshBulbs: `${activeSite}Lifx/Api/Refresh`,
+  off: `${activeSite}Lifx/Api/Off`,
+  on: `${activeSite}Lifx/Api/On`,
+  setBrightness: `${activeSite}Lifx/Api/Brightness`,
+  setColor: `${activeSite}Lifx/Api/Color`,
+  setLabel: `${activeSite}Lifx/Api/Label`,
+  setPower: `${activeSite}Lifx/Api/Power`,
+  setTemperature: `${activeSite}Lifx/Api/Temperature`,
 };
 
 const getAxiosParsedUrl = ({ url, params }) => {
   const result = axios.get(url, {
     timeout: 60000,
     params,
+    // httpsAgent,
   }).then((response) => {
     const { data } = response;
     return data;

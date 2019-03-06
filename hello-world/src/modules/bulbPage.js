@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import lifxClientApi from '@/services/lifxClientApi';
 
-export const moduleName = 'mainPage';
-export const GET_BULBS = 'GET_BULBS';
+export const moduleName = 'bulbPage';
+export const GET_LABEL = 'GET_LABEL';
+export const SET_LABEL = 'SET_LABEL';
 export const GET_SCENES = 'GET_SCENES';
 export const GET_SCHEDULES = 'GET_SCHEDULES';
 export const GET_LOADING = 'GET_LOADING';
@@ -14,8 +15,7 @@ export const GET_LAST_ACTION_RESPONSE = 'GET_LAST_ACTION_RESPONSE';
 
 const moduleState = {
   debugInfo: '',
-  bulbs: [
-  ],
+  label: '',
   scenes: [
   ],
   schedules: [
@@ -25,7 +25,7 @@ const moduleState = {
 };
 
 const getters = {
-  [GET_BULBS]: state => () => [...state.bulbs],
+  [GET_LABEL]: state => () => [...state.label],
   [GET_SCENES]: state => () => [...state.scenes],
   [GET_SCHEDULES]: state => () => [...state.schedules],
   [GET_LOADING]: state => () => state.loading,
@@ -33,9 +33,12 @@ const getters = {
 };
 
 const actions = {
-  [REFRESH_BULBS]: async ({ commit }) => {
+  [INIT]: ({ commit }, label) => {
+    commit('setLabel', { label });
+  },
+  [REFRESH_BULBS]: ({ commit }) => {
     commit('setLoading', { loading: true });
-    await lifxClientApi.getBulbsAsync()
+    lifxClientApi.getBulbsAsync()
       .then((response) => {
         const { responseType, responseData } = response;
         const bulbs = [];
@@ -58,14 +61,11 @@ const actions = {
             };
 
             bulbs.push(bulb);
-            commit('resetBulbs', { bulbs });
-            commit('setLastActionResponse', { responseType, responseData });
           });
-        } else {
-          const { message } = responseData;
-          commit('resetBulbs', { bulbs });
-          commit('setLastActionResponse', { responseType, message });
         }
+
+        commit('resetBulbs', { bulbs });
+        commit('setLastActionResponse', { responseType, responseData });
       }).finally(() => {
         commit('setLoading', { loading: false });
       });
@@ -85,6 +85,9 @@ const actions = {
 };
 
 const mutations = {
+  setLabel(state, { label }) {
+    Vue.set(state, 'label', label);
+  },
   resetBulbs(state, { bulbs }) {
     Vue.set(state, 'bulbs', bulbs);
   },

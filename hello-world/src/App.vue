@@ -1,20 +1,12 @@
 <template>
-  <div id="app" class='app'>
-    <main-page></main-page>
+  <div id="app">
+    <div id="nav">
+      <router-link to="/">MainPage</router-link>
+      <!--<router-link to="/bulb/Television">BulbPage</router-link>-->
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import mainPage from '@/views/MainPage.vue';
-
-export default {
-  name: 'app',
-  components: {
-    mainPage,
-  },
-};
-
-</script>
 
 <style lang="scss">
 #app {

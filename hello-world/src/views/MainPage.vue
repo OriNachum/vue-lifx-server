@@ -1,27 +1,32 @@
 <template>
   <div class="main-page">
-    <div class="bulbs">
-      <div v-if="loading()">
+    <div v-if="loading()">
+      <div>
+        Loading...
+        </div>
+    </div>
+    <div v-else>
+      <div @click="refreshBulbs()">
+        [Refresh bulbs]
+      </div>
+      <div v-if="showError()">
+        Error: {{ getLastActionResponse().responseData }}
+      </div>
+      <div v-if="!getBulbs().length">
         <div>
-          Loading...
-          </div>
+          No bulbs found.
+        </div>
       </div>
       <div v-else>
-        <div v-if="showError()">
-          Error: {{ getLastActionResponse().responseData }}
-        </div>
-        <div v-if="!getBulbs().length">
-          <div @click="refreshBulbs()">
-            No bulbs found.
-          </div>
-        </div>
-        <div v-else>
-          <div v-for="bulb in getBulbs()" :key="bulb.Label">
-            <!-- Add this when adding routing to bulb page<div @click="toggleBulb(bulb)">-->
-            <div>
-              <light-bulb :bulb="bulb">
-              </light-bulb>
-            </div>
+        <div class="bulbs">
+          <div v-for="bulb in getBulbs()" :key="bulb.label">
+            <!--<router-link :to="{ name:'bulbPage', path:`/${bulb.label}`, params: { label: bulb.label } }">-->
+            <router-link to="/bulb/Television">
+            <!--<div @click="routeToBulbPage(bulb)"> -->
+              <bulb :bulb="bulb">
+              </bulb>
+            <!--</div>-->
+            </router-link>
           </div>
         </div>
       </div>
@@ -31,8 +36,11 @@
 
 <script>
 // @ is an alias to /src
-import LightBulb from '@/components/LightBulb.vue';
+import Bulb from '@/components/Bulb.vue';
+// import BulbPage from '@/views/BulbPage.vue';
+
 import { mapGetters, mapActions } from 'vuex';
+
 import {
   moduleName,
   REFRESH_BULBS,
@@ -50,7 +58,7 @@ export default {
     };
   },
   components: {
-    LightBulb,
+    Bulb,
   },
   computed: {
     ...mapGetters(moduleName, {
@@ -68,6 +76,15 @@ export default {
     showError: () => this && this.computed
       && this.computed.getLastActionResponse().responseType !== 0
       && (this.computed.getLastActionResponse().responseData),
+    routeToBulbPage(bulb) {
+      this.$router.push({
+        name: 'bulbPage',
+        params: { bulb },
+      });
+      // const routeData =
+      //  this.$router.resolve({ name: 'bulbPage', component: BulbPage, params: { bulb } });
+      // window.open(routeData.href, '_blank');
+    },
   },
   mounted() {
     // await this.init();
