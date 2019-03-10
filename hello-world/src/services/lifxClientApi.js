@@ -1,6 +1,15 @@
 import axios from 'axios';
+// import https from 'https';
+// const httpsAgent = new https.Agent({ keepAlive: true }),
 
-axios.defaults.withCredentials = false;
+// axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: true });
+/*
+  axios.defaults.withCredentials = false;
+  axios.defaults.rejectUnauthorized = false;
+  axios.rejectUnauthorized = false;
+*/
+// axios.httpsAgent.rejectUnauthorized = false;
+// axios.defaults.httpsAgent.rejectUnauthorized = false;
 
 // const httsAgent = axios. new https.Agent({ rejectUnauthorized: false });
 
@@ -13,10 +22,12 @@ const httpsAgent = new https.Agent({
 })
 */
 
+const hostname = 'ori';
+
 const sites = {
-  dev: 'https://localhost:44370/',
-  devIisDebug: 'https://localhost:5001/',
-  devIis: 'https://localhost/LifxWebApi/',
+  dev: `https://${hostname}:44370/`,
+  devIisDebug: `https://${hostname}:5001/`,
+  devIis: `https://${hostname}/LifxWebApi/`,
 };
 
 const { devIis: activeSite } = sites;
@@ -35,6 +46,51 @@ const urls = {
   setTemperature: `${activeSite}Lifx/Api/Temperature`,
 };
 
+const adaptDeserializedBulb = (bulb) => {
+  const address = `${bulb.IPv4Address}`;
+  return {
+    label: `${bulb.Label}`,
+    address,
+    product: `${bulb.Product}`,
+    version: `${bulb.Version}`,
+    power: `${bulb.Power}` !== '0',
+    temperature: `${bulb.Temperature}`,
+    brightness: `${bulb.Brightness}`,
+    colorHue: `${bulb.ColorHue}`,
+    colorSaturation: `${bulb.ColorSaturation}`,
+    lastVerifiedState: `${bulb.LastVerifiedState}`,
+    stateVerificationTimeUtc: `${bulb.StateVerificationTimeUtc}`,
+  };
+};
+
+const deserializeBulbs = (serializedBulbs) => {
+  const bulbs = [];
+  let responseBulbs;
+  try {
+    responseBulbs = JSON.parse(serializedBulbs);
+  } catch {
+    return bulbs;
+  }
+
+  responseBulbs.forEach((deserializedBulb) => {
+    const bulb = adaptDeserializedBulb(deserializedBulb);
+    bulbs.push(bulb);
+  });
+
+  return bulbs;
+};
+
+const deserializeBulb = (serializedBulbs) => {
+  let deserializedBulb;
+  try {
+    deserializedBulb = JSON.parse(serializedBulbs);
+  } catch {
+    return undefined;
+  }
+  const bulb = adaptDeserializedBulb(deserializedBulb);
+  return bulb;
+};
+
 const getAxiosParsedUrl = ({ url, params }) => {
   const result = axios.get(url, {
     timeout: 60000,
@@ -42,7 +98,12 @@ const getAxiosParsedUrl = ({ url, params }) => {
     // httpsAgent,
   }).then((response) => {
     const { data } = response;
-    return data;
+    const { bulbs, bulb } = data;
+    const parsedBulbs = deserializeBulbs(bulbs);
+    const parsedBulb = deserializeBulb(bulb);
+    const parsedResponse = { ...data, bulbs: parsedBulbs, bulb: parsedBulb };
+
+    return parsedResponse;
   }).catch((reason) => {
     const errorResponse = { responseType: 1, responseData: reason };
     return errorResponse;
@@ -81,27 +142,15 @@ const toggleBulbAsync = label => getAxiosParsedUrl({
   params: { label },
 });
 
-const setOffAsync = async () => {
-  const status = await axios.get(urls.off, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return status;
-};
+const setOffAsync = ({ label, overTime }) => getAxiosParsedUrl({
+  url: urls.off,
+  params: { label, overTime },
+});
 
-const setOnAsync = async () => {
-  const result = await axios.get(urls.on, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return result;
-};
+const setOnAsync = ({ label, overTime }) => getAxiosParsedUrl({
+  url: urls.on,
+  params: { label, overTime },
+});
 
 const setBrightnessAsync = async () => {
   const status = await axios.get(urls.setBrightness, {

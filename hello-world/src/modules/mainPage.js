@@ -37,30 +37,11 @@ const actions = {
     commit('setLoading', { loading: true });
     await lifxClientApi.getBulbsAsync()
       .then((response) => {
-        const { responseType, responseData } = response;
-        const bulbs = [];
+        const { responseType, responseData, bulbs } = response;
         if (responseType === 0) {
-          const responseBulbs = JSON.parse(responseData);
-          responseBulbs.forEach((x) => {
-            const address = `${x.IPv4Address}`;
-            const bulb = {
-              label: `${x.Label}`,
-              address,
-              product: `${x.Product}`,
-              version: `${x.Version}`,
-              power: `${x.Power}`,
-              temperature: `${x.Temperature}`,
-              brightness: `${x.Brightness}`,
-              colorHue: `${x.ColorHue}`,
-              colorSaturation: `${x.ColorSaturation}`,
-              lastVerifiedState: `${x.LastVerifiedState}`,
-              stateVerificationTimeUtc: `${x.StateVerificationTimeUtc}`,
-            };
-
-            bulbs.push(bulb);
-            commit('resetBulbs', { bulbs });
-            commit('setLastActionResponse', { responseType, responseData });
-          });
+          // bulbs.push(bulb);
+          commit('resetBulbs', { bulbs });
+          commit('setLastActionResponse', { responseType, responseData });
         } else {
           const { message } = responseData;
           commit('resetBulbs', { bulbs });

@@ -1,9 +1,24 @@
 <template>
   <div id="bulb-page" class='bulb-page'>
     BULB PAGE:
-    <div v-if="bulb && bulb.label">
-      {{ bulb.label }}
-      <div @click="toggleBulb(bulb)">Toggle</div>
+    <div v-if="isBulbDefined">
+      {{ getLabel }}
+      <div @click="toggleBulb()">Toggle</div>
+      <div>
+        <div>
+           <input v-model="overtime">
+        </div>
+        <div v-if="overtime" @click="toggleBulb(overtime)"> 
+          click here to toggle over {{ overtime }} seconds 
+        </div>
+        <div v-else>
+          input a number to toggle over time
+        </div>
+      </div>
+      <div> Power: {{ getPower }}</div>
+    </div>
+    <div v-else>
+      No bulb defined, return to main page.
     </div>
   </div>
 </template>
@@ -15,6 +30,8 @@ import {
   moduleName,
   INIT,
   GET_LABEL,
+  GET_POWER,
+  IS_BULB_DEFINED,
   GET_LOADING,
   TOGGLE_BULB,
   GET_LAST_ACTION_RESPONSE,
@@ -39,11 +56,14 @@ export default {
   },
   data() {
     return {
+      overtime: 0,
     };
   },
   computed: {
     ...mapGetters(moduleName, {
+      isBulbDefined: IS_BULB_DEFINED,
       getLabel: GET_LABEL,
+      getPower: GET_POWER,
       loading: GET_LOADING,
       getLastActionResponse: GET_LAST_ACTION_RESPONSE,
     }),
@@ -56,8 +76,8 @@ export default {
     }),
   },
   mounted() {
-    if (this && this.$props && this.$props.label) {
-      this.init(this.$props.label);
+    if (this && this.$props.bulb) {
+      this.init(this.$props.bulb);
     }
   },
 };

@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import lifxClientApi from '@/services/lifxClientApi';
+// import { stat } from 'fs';
 
 export const moduleName = 'bulbPage';
 export const GET_LABEL = 'GET_LABEL';
-export const SET_LABEL = 'SET_LABEL';
+export const GET_POWER = 'GET_POWER';
+export const IS_BULB_DEFINED = 'IS_BULB_DEFINED';
 export const GET_SCENES = 'GET_SCENES';
 export const GET_SCHEDULES = 'GET_SCHEDULES';
 export const GET_LOADING = 'GET_LOADING';
@@ -15,54 +17,33 @@ export const GET_LAST_ACTION_RESPONSE = 'GET_LAST_ACTION_RESPONSE';
 
 const moduleState = {
   debugInfo: '',
-  label: '',
-  scenes: [
-  ],
-  schedules: [
-  ],
+  bulb: '',
   loading: false,
   lastActionResponse: { responseType: { }, responseData: { } },
 };
 
 const getters = {
-  [GET_LABEL]: state => () => [...state.label],
-  [GET_SCENES]: state => () => [...state.scenes],
-  [GET_SCHEDULES]: state => () => [...state.schedules],
-  [GET_LOADING]: state => () => state.loading,
-  [GET_LAST_ACTION_RESPONSE]: state => () => state.lastActionResponse,
+  [GET_LABEL]: state => state.bulb.label,
+  [GET_POWER]: state => state.bulb.power,
+  [IS_BULB_DEFINED]: (state) => {
+    if (state.bulb) {
+      return true;
+    }
+    return false;
+  },
+  [GET_LOADING]: state => state.loading,
+  [GET_LAST_ACTION_RESPONSE]: state => state.lastActionResponse,
 };
 
 const actions = {
-  [INIT]: ({ commit }, label) => {
-    commit('setLabel', { label });
+  [INIT]: ({ commit }, bulb) => {
+    commit('setBulb', { bulb });
   },
   [REFRESH_BULBS]: ({ commit }) => {
     commit('setLoading', { loading: true });
     lifxClientApi.getBulbsAsync()
       .then((response) => {
-        const { responseType, responseData } = response;
-        const bulbs = [];
-        if (responseType === 0) {
-          const responseBulbs = JSON.parse(responseData);
-          responseBulbs.forEach((x) => {
-            const address = `${x.IPv4Address}`;
-            const bulb = {
-              label: `${x.Label}`,
-              address,
-              product: `${x.Product}`,
-              version: `${x.Version}`,
-              power: `${x.Power}`,
-              temperature: `${x.Temperature}`,
-              brightness: `${x.Brightness}`,
-              colorHue: `${x.ColorHue}`,
-              colorSaturation: `${x.ColorSaturation}`,
-              lastVerifiedState: `${x.LastVerifiedState}`,
-              stateVerificationTimeUtc: `${x.StateVerificationTimeUtc}`,
-            };
-
-            bulbs.push(bulb);
-          });
-        }
+        const { responseType, responseData, bulbs } = response;
 
         commit('resetBulbs', { bulbs });
         commit('setLastActionResponse', { responseType, responseData });
@@ -70,22 +51,35 @@ const actions = {
         commit('setLoading', { loading: false });
       });
   },
-  [TOGGLE_BULB]: ({ commit }, bulb) => {
+  [TOGGLE_BULB]: ({ commit, state }, overTime) => {
     commit('setLoading', { loading: true });
+    const { bulb } = state;
     const { label } = bulb;
-    lifxClientApi.toggleBulbAsync(label)
-      .then((response) => {
-        const { responseType, responseData } = response;
-        commit('setLastActionResponse', { responseType, responseData });
-      }).finally(() => {
-        commit('setLoading', { loading: false });
-      });
+    if (bulb.power) {
+      lifxClientApi.setOffAsync({ label, overTime })
+        .then((response) => {
+          const { responseType, responseData, bulb: newBulbState } = response;
+          commit('setBulb', { bulb: newBulbState });
+          commit('setLastActionResponse', { responseType, responseData });
+        }).finally(() => {
+          commit('setLoading', { loading: false });
+        });
+    } else {
+      lifxClientApi.setOnAsync({ label, overTime })
+        .then((response) => {
+          const { responseType, responseData, bulb: newBulbState } = response;
+          commit('setBulb', { bulb: newBulbState });
+          commit('setLastActionResponse', { responseType, responseData });
+        }).finally(() => {
+          commit('setLoading', { loading: false });
+        });
+    }
   },
 };
 
 const mutations = {
-  setLabel(state, { label }) {
-    Vue.set(state, 'label', label);
+  setBulb(state, { bulb }) {
+    Vue.set(state, 'bulb', bulb);
   },
   resetBulbs(state, { bulbs }) {
     Vue.set(state, 'bulbs', bulbs);
@@ -95,6 +89,9 @@ const mutations = {
   },
   setLastActionResponse(state, { responseType, responseData }) {
     Vue.set(state, 'lastActionResponse', { responseType, responseData });
+  },
+  setPower(state, { power }) {
+    Vue.set(state.bulb, 'power', power);
   },
 };
 
