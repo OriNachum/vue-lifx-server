@@ -44,6 +44,7 @@ const urls = {
   setLabel: `${activeSite}Lifx/Api/Label`,
   setPower: `${activeSite}Lifx/Api/Power`,
   setTemperature: `${activeSite}Lifx/Api/Temperature`,
+  fadeToState: `${activeSite}Lifx/Api/FadeToState`,
 };
 
 const adaptDeserializedBulb = (bulb) => {
@@ -53,13 +54,13 @@ const adaptDeserializedBulb = (bulb) => {
     address,
     product: `${bulb.Product}`,
     version: `${bulb.Version}`,
-    power: `${bulb.Power}` !== '0',
-    temperature: `${bulb.Temperature}`,
-    brightness: `${bulb.Brightness}`,
-    colorHue: `${bulb.ColorHue}`,
-    colorSaturation: `${bulb.ColorSaturation}`,
-    lastVerifiedState: `${bulb.LastVerifiedState}`,
-    stateVerificationTimeUtc: `${bulb.StateVerificationTimeUtc}`,
+    power: `${bulb.State.Power}` !== '0',
+    temperature: `${bulb.State.Temperature}`,
+    brightness: `${bulb.State.Brightness}`,
+    colorHue: `${bulb.State.ColorHue}`,
+    colorSaturation: `${bulb.State.ColorSaturation}`,
+//    lastVerifiedState: `${bulb.State}`,
+    stateVerificationTimeUtc: `${bulb.State.StateVerificationTimeUtc}`,
   };
 };
 
@@ -152,6 +153,11 @@ const setOnAsync = ({ label, overTime }) => getAxiosParsedUrl({
   params: { label, overTime },
 });
 
+const fadeToState = ({ label, bulbState, overtime }) => getAxiosParsedUrl({
+  url: urls.fadeToState,
+  params: { label, serializedState: bulbState, fadeInDuration: overtime },
+});
+
 const setBrightnessAsync = async () => {
   const status = await axios.get(urls.setBrightness, {
     timeout: 60000,
@@ -219,4 +225,5 @@ export default {
   setLabelAsync,
   setPowerAsync,
   setTemperatureAsync,
+  fadeToState,
 };

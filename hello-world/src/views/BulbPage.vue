@@ -3,19 +3,38 @@
     BULB PAGE:
     <div v-if="isBulbDefined">
       {{ getLabel }}
-      <div @click="toggleBulb()">Toggle</div>
+      <div @click="toggleBulb()">
+        Toggle
+      </div>
       <div>
         <div>
            <input v-model="overtime">
         </div>
-        <div v-if="overtime" @click="toggleBulb(overtime)"> 
-          click here to toggle over {{ overtime }} seconds 
+        <div v-if="overtime" @click="fadeToState({ newState: { brightness } , overtime })">
+          click here to change bulb over {{ overtime }} seconds
         </div>
         <div v-else>
           input a number to toggle over time
         </div>
       </div>
-      <div> Power: {{ getPower }}</div>
+      <div>
+        Power: {{ getPower }}
+      </div>
+      <div>
+        <div>
+           <input v-model="brightness" :placeholder="getBrightness">
+        </div>
+        <div v-if="brightness !== getBrightness">
+          On click, will change brightness to: {{ 100 * brightness }}%
+        </div>
+        <div v-else>
+          input a different number to change state
+        </div>
+      </div>
+      <div> Brightness: {{ getBrightness }}</div>
+      <div> Temperature: {{ getTemperature }}</div>
+      <div> Color Hue: {{ getHue }}</div>
+      <div> Color Saturation: {{ getSaturation }}</div>
     </div>
     <div v-else>
       No bulb defined, return to main page.
@@ -28,13 +47,8 @@ import { mapGetters, mapActions } from 'vuex';
 
 import {
   moduleName,
-  INIT,
-  GET_LABEL,
-  GET_POWER,
-  IS_BULB_DEFINED,
-  GET_LOADING,
-  TOGGLE_BULB,
-  GET_LAST_ACTION_RESPONSE,
+  getters,
+  actions,
 } from '@/modules/bulbPage';
 
 export default {
@@ -57,21 +71,27 @@ export default {
   data() {
     return {
       overtime: 0,
+      brightness: 0,
     };
   },
   computed: {
     ...mapGetters(moduleName, {
-      isBulbDefined: IS_BULB_DEFINED,
-      getLabel: GET_LABEL,
-      getPower: GET_POWER,
-      loading: GET_LOADING,
-      getLastActionResponse: GET_LAST_ACTION_RESPONSE,
+      isBulbDefined: getters.IS_BULB_DEFINED,
+      getLabel: getters.GET_LABEL,
+      getPower: getters.GET_POWER,
+      loading: getters.GET_LOADING,
+      getLastActionResponse: getters.GET_LAST_ACTION_RESPONSE,
+      getBrightness: getters.GET_BRIGHTNESS,
+      getTemperature: getters.GET_TEMPERATURE,
+      getHue: getters.GET_HUE,
+      getSaturation: getters.GET_SATURATION,
     }),
   },
   methods: {
     ...mapActions(moduleName, {
-      toggleBulb: TOGGLE_BULB,
-      init: INIT,
+      toggleBulb: actions.TOGGLE_BULB,
+      init: actions.INIT,
+      fadeToState: actions.FADE_TO_STATE,
       // init: INIT,
     }),
   },
