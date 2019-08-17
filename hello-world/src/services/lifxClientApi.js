@@ -37,14 +37,14 @@ const urls = {
   reset: `${activeSite}Lifx/Api/Reset`,
   toggleBulb: `${activeSite}Lifx/Api/Toggle`,
   refreshBulbs: `${activeSite}Lifx/Api/Refresh`,
+  refreshBulb: `${activeSite}Lifx/Api/RefreshBulb`,
   off: `${activeSite}Lifx/Api/Off`,
   on: `${activeSite}Lifx/Api/On`,
-  setBrightness: `${activeSite}Lifx/Api/Brightness`,
-  setColor: `${activeSite}Lifx/Api/Color`,
+  setBrightness: `${activeSite}Lifx/Api/SetBrightness`,
+  setColor: `${activeSite}Lifx/Api/SetColor`,
   setLabel: `${activeSite}Lifx/Api/Label`,
-  setPower: `${activeSite}Lifx/Api/Power`,
-  setTemperature: `${activeSite}Lifx/Api/Temperature`,
-  fadeToState: `${activeSite}Lifx/Api/FadeToState`,
+  setPower: `${activeSite}Lifx/Api/SetPower`,
+  setTemperature: `${activeSite}Lifx/Api/SetTemperature`,
 };
 
 const adaptDeserializedBulb = (bulb) => {
@@ -57,9 +57,9 @@ const adaptDeserializedBulb = (bulb) => {
     power: `${bulb.State.Power}` !== '0',
     temperature: `${bulb.State.Temperature}`,
     brightness: `${bulb.State.Brightness}`,
-    colorHue: `${bulb.State.ColorHue}`,
-    colorSaturation: `${bulb.State.ColorSaturation}`,
-//    lastVerifiedState: `${bulb.State}`,
+    hue: `${bulb.State.Hue}`,
+    saturation: `${bulb.State.Saturation}`,
+    // lastVerifiedState: `${bulb.State}`,
     stateVerificationTimeUtc: `${bulb.State.StateVerificationTimeUtc}`,
   };
 };
@@ -136,6 +136,12 @@ const refreshBulbsAsync = async () => {
   return result;
 };
 
+
+const refreshBulbAsync = label => getAxiosParsedUrl({
+  url: urls.refreshBulb,
+  params: { label },
+});
+
 const getBulbsAsync = () => getAxiosParsedUrl({ url: urls.getBulbs });
 
 const toggleBulbAsync = label => getAxiosParsedUrl({
@@ -143,87 +149,50 @@ const toggleBulbAsync = label => getAxiosParsedUrl({
   params: { label },
 });
 
-const setOffAsync = ({ label, overTime }) => getAxiosParsedUrl({
+const setOffAsync = ({ label, overtime }) => getAxiosParsedUrl({
   url: urls.off,
-  params: { label, overTime },
+  params: { label, overtime },
 });
 
-const setOnAsync = ({ label, overTime }) => getAxiosParsedUrl({
+const setOnAsync = ({ label, overtime }) => getAxiosParsedUrl({
   url: urls.on,
-  params: { label, overTime },
+  params: { label, overtime },
 });
 
-const fadeToState = ({ label, bulbState, overtime }) => getAxiosParsedUrl({
-  url: urls.fadeToState,
-  params: { label, serializedState: bulbState, fadeInDuration: overtime },
+const setColorAsync = ({
+  label,
+  saturation,
+  hue,
+  overtime,
+}) => getAxiosParsedUrl({
+  url: urls.setColor,
+  params: {
+    label,
+    saturation,
+    hue,
+    overtime,
+  },
 });
 
-const setBrightnessAsync = async () => {
-  const status = await axios.get(urls.setBrightness, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return status;
-};
+const setTemperatureAsync = ({ label, temperature, overtime }) => getAxiosParsedUrl({
+  url: urls.setTemperature,
+  params: { label, temperature, overtime },
+});
 
-const setColorAsync = async () => {
-  const result = await axios.get(urls.setColor, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return result;
-};
-
-const setLabelAsync = async () => {
-  const status = await axios.get(urls.setLabel, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return status;
-};
-
-const setPowerAsync = async () => {
-  const result = await axios.get(urls.setPower, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return result;
-};
-
-const setTemperatureAsync = async () => {
-  const result = await axios.get(urls.setTemperature, {
-    timeout: 60000,
-  })
-    .then((response) => {
-      const { data } = response;
-      return data;
-    });
-  return result;
-};
+const setBrightnessAsync = ({ label, brightness, overtime }) => getAxiosParsedUrl({
+  url: urls.setBrightness,
+  params: { label, brightness, overtime },
+});
 
 export default {
   resetAsync,
   getBulbsAsync,
   toggleBulbAsync,
   refreshBulbsAsync,
+  refreshBulbAsync,
   setOffAsync,
   setOnAsync,
-  setBrightnessAsync,
   setColorAsync,
-  setLabelAsync,
-  setPowerAsync,
   setTemperatureAsync,
-  fadeToState,
+  setBrightnessAsync,
 };

@@ -25,7 +25,12 @@ const moduleState = {
 };
 
 const getters = {
-  [GET_BULBS]: state => () => [...state.bulbs],
+  [GET_BULBS]: state => () => {
+    if (state.bulbs) {
+      return [...state.bulbs];
+    }
+    return [];
+  },
   [GET_SCENES]: state => () => [...state.scenes],
   [GET_SCHEDULES]: state => () => [...state.schedules],
   [GET_LOADING]: state => () => state.loading,
