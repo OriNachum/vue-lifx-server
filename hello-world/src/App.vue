@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">MainPage</router-link>
+  <div id="app" class="app">
+    <div id="nav" class="navbar">
+      <router-link class="navbar-link" to="/">Main Page</router-link>
+      <span class="navbar-space"></span>
+      <router-link class="navbar-link" to="/schedule">Schedule Page</router-link>
       <!--<router-link to="/bulb/Television">BulbPage</router-link>-->
     </div>
     <router-view/>
@@ -23,6 +25,16 @@
     color: #2c3e50;
     &.router-link-exact-active {
       color: #42b983;
+    }
+  }
+}
+
+.app {
+  .navbar{
+    display: inline-flex;
+
+    &-space {
+      min-width: 1em;
     }
   }
 }

@@ -1,50 +1,22 @@
 import axios from 'axios';
-// import https from 'https';
-// const httpsAgent = new https.Agent({ keepAlive: true }),
+import baseApi from './baseApi';
 
-// axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: true });
-/*
-  axios.defaults.withCredentials = false;
-  axios.defaults.rejectUnauthorized = false;
-  axios.rejectUnauthorized = false;
-*/
-// axios.httpsAgent.rejectUnauthorized = false;
-// axios.defaults.httpsAgent.rejectUnauthorized = false;
-
-// const httsAgent = axios. new https.Agent({ rejectUnauthorized: false });
-
-/*
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
-  cert: fs.readFileSync("./usercert.pem"),
-  key: fs.readFileSync("./key.pem"),
-  passphrase: "YYY"
-})
-*/
-
-const hostname = 'ori';
-
-const sites = {
-  dev: `https://${hostname}:44370/`,
-  devIisDebug: `https://${hostname}:5001/`,
-  devIis: `https://${hostname}/LifxWebApi/`,
-};
-
-const { devIis: activeSite } = sites;
+const { activeSite } = baseApi;
+const controllerPath = 'LifxWebApi/Lifx/Api';
 
 const urls = {
-  getBulbs: `${activeSite}Lifx/Api/GetBulbs`,
-  reset: `${activeSite}Lifx/Api/Reset`,
-  toggleBulb: `${activeSite}Lifx/Api/Toggle`,
-  refreshBulbs: `${activeSite}Lifx/Api/Refresh`,
-  refreshBulb: `${activeSite}Lifx/Api/RefreshBulb`,
-  off: `${activeSite}Lifx/Api/Off`,
-  on: `${activeSite}Lifx/Api/On`,
-  setBrightness: `${activeSite}Lifx/Api/SetBrightness`,
-  setColor: `${activeSite}Lifx/Api/SetColor`,
-  setLabel: `${activeSite}Lifx/Api/Label`,
-  setPower: `${activeSite}Lifx/Api/SetPower`,
-  setTemperature: `${activeSite}Lifx/Api/SetTemperature`,
+  getBulbs: `${activeSite}/${controllerPath}/GetBulbs`,
+  reset: `${activeSite}/${controllerPath}/Reset`,
+  toggleBulb: `${activeSite}/${controllerPath}/Toggle`,
+  refreshBulbs: `${activeSite}/${controllerPath}/Refresh`,
+  refreshBulb: `${activeSite}/${controllerPath}/RefreshBulb`,
+  off: `${activeSite}/${controllerPath}/Off`,
+  on: `${activeSite}/${controllerPath}/On`,
+  setBrightness: `${activeSite}/${controllerPath}/SetBrightness`,
+  setColor: `${activeSite}/${controllerPath}/SetColor`,
+  setLabel: `${activeSite}/${controllerPath}/Label`,
+  setPower: `${activeSite}/${controllerPath}/SetPower`,
+  setTemperature: `${activeSite}/${controllerPath}/SetTemperature`,
 };
 
 const adaptDeserializedBulb = (bulb) => {
