@@ -29,15 +29,19 @@ export default new Router({
       path: '/schedule',
       name: 'schedule',
       props: true,
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/SchedulePage.vue'),
-      /*
-        beforeEnter: ( to, next, from ) => {
-        let a = a;
-      },
-      */
+      component: () => import(/* webpackChunkName: "about" */ './views/Schedule/SchedulePage.vue'),
+    },
+    {
+      path: '/schedule/defineAction',
+      name: 'defineAction',
+      props: true,
+      component: () => import(/* webpackChunkName: "about" */ './views/Schedule/DefineAction.vue'),
+    },
+    {
+      path: '/schedule/scheduleAction',
+      name: 'scheduleAction',
+      props: true,
+      component: () => import(/* webpackChunkName: "about" */ './views/Schedule/ScheduleAction.vue'),
     },
   ],
 });

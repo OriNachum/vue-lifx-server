@@ -12,14 +12,14 @@
       <div v-if="showError()">
         Error: {{ getLastActionResponse().responseData }}
       </div>
-      <div v-if="!getBulbs().length">
+      <div v-if="!getBulbs.length">
         <div>
           No bulbs found.
         </div>
       </div>
       <div v-else>
         <div class="bulbs">
-          <div v-for="bulb in getBulbs()" :key="bulb.label">
+          <div v-for="bulb in getBulbs" :key="bulb.label">
             <router-link :to="{ name: 'bulb', params: { bulb } }">
               <bulb :bulb="bulb">
               </bulb>

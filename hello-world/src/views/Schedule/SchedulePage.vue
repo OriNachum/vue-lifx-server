@@ -5,15 +5,20 @@
         SupportedActions:
       </div>
       <div class='supported-actions--word supported-actions--word__item' v-for="supportedAction in getSupportedActions" :key="supportedAction">
-        {{ supportedAction }},
+        <router-link :to="{ name: 'defineAction', params: { supportedAction } }">
+          {{ supportedAction }},
+        </router-link>
       </div>
     </div>
     <div class='schedule-page--defined-actions defined-actions'>
       <span class='defined-actions--word defined-actions--word__header'>
         Defined Actions:
       </span>
-      <span class='defined-actions--word defined-actions--word__item' v-for="action in getActions" :key="action">
-        {{ action }},
+      <span class='defined-actions--word defined-actions--word__item' v-for="definedAction in getActions" :key="definedAction">
+        <router-link :to="{ name: 'scheduleAction', params: { definedAction } }">
+          {{ definedAction }},
+        </router-link>
+
       </span>
     </div>
     <div class='schedule-page--schedule schedule'>
@@ -27,21 +32,25 @@
           </thead>
           <tbody class='table-body'>
             <tr v-for="action in getSchedule" :key="action.id" class='table-body--row row'>
-              <td class='table-body--row row--column'>
-                {{ action.Name }} 
-              </td>
-              <td class='table-body--row row--column'>
-                {{ action.FullUrl }} 
-              </td>
-              <td class='table-body--row row--column'>
-                {{ action.Time }} 
-              </td>
-              <td class='table-body--row row--column'>
-                {{ action.DayOfWeek }} 
-              </td>
-              <td class='table-body--row row--column'>
-                {{ action.Active }} 
-              </td>
+              <!--<router-link :to="{ name: 'bulb', params: { bulb } }">
+                <bulb :bulb="bulb">
+                </bulb>-->
+                <td class='table-body--row row--column'>
+                  {{ action.Name }} 
+                </td>
+                <td class='table-body--row row--column'>
+                  {{ action.FullUrl }} 
+                </td>
+                <td class='table-body--row row--column'>
+                  {{ action.Time }} 
+                </td>
+                <td class='table-body--row row--column'>
+                  {{ action.DayOfWeek }} 
+                </td>
+                <td class='table-body--row row--column'>
+                  {{ action.Active }} 
+                </td>
+              <!--</router-link>-->
             </tr>
           </tbody>
         </table>

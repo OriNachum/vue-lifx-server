@@ -36,7 +36,7 @@
               :min="0"
               :max="100">
             </slide-bar>
-            <button @click="setBrightness({brightness, overtime})">Set Brightness</button>
+            <button @click="setBrightness({ brightness, overtime })">Set Brightness</button>
           </div>
           <div class='input-temperature'>
             <slide-bar
@@ -44,7 +44,7 @@
               :min="2500"
               :max="9000">
             </slide-bar>
-            <button @click="setTemperature({temperature, overtime})">Set Temperature</button>
+            <button @click="setTemperature({ temperature, overtime })">Set Temperature</button>
           </div>
           <div class='input-saturation'>
             <slide-bar
@@ -156,7 +156,6 @@ export default {
     }
   },
 };
-// Put here how to design each light in a page
 </script>
 
 <style lang="scss">
