@@ -32,9 +32,7 @@
           </thead>
           <tbody class='table-body'>
             <tr v-for="action in getSchedule" :key="action.id" class='table-body--row row'>
-              <!--<router-link :to="{ name: 'bulb', params: { bulb } }">
-                <bulb :bulb="bulb">
-                </bulb>-->
+              <!--<router-link :to="{ name: 'editSchedule', params: { action } }">-->
                 <td class='table-body--row row--column'>
                   {{ action.Name }} 
                 </td>
@@ -56,7 +54,7 @@
         </table>
 <!--
       <ul>
-        <li class='schedule--item' v-for="action in getSchedule"> <!--v-bind:action.>
+        <li class='schedule--item' v-for="action in getSchedule"> v-bind:action.>
           
           {{ action.Name }} {{ action.FullUrl }} {{ action.Time }} {{ action.DayOfWeek }} {{ action.Active }}
         </li>
@@ -74,7 +72,7 @@ import {
   moduleName,
   getters,
   actions,
-} from '@/modules/schedulePage';
+} from '@/modules/schedule';
 
 export default {
   name: 'schedulePage',

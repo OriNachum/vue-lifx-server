@@ -7,35 +7,30 @@ const urls = {
   getSchedule: `${activeSite}/${controllerPath}/GetSchedule`,
   getActions: `${activeSite}/${controllerPath}/GetActions`,
   getSupportedActions: `${activeSite}/${controllerPath}/GetSupportedActions`,
-  createAction: `${activeSite}/${controllerPath}/CreateAction`,
+  defineAction: `${activeSite}/${controllerPath}/DefineAction`,
   scheduleAction: `${activeSite}/${controllerPath}/ScheduleAction`,
 };
 
-const getSchedule = () => {
-  return getAxiosParsedUrl({ url: urls.getSchedule })
-    .then((data) => {
-      return data;
-    });
-};
-const getActions = () => {
-  return getAxiosParsedUrl({ url: urls.getActions })
-    .then((data) => {
-      return data;
-    });
-};
-const getSupportedActions = () => {
-  return getAxiosParsedUrl({ url: urls.getSupportedActions })
-    .then((data) => {
-      return data;
-    });
-};
-const createAction = () => getAxiosParsedUrl({ url: urls.createAction });
-const scheduleAction = () => getAxiosParsedUrl({ url: urls.scheduleAction });
+const getSchedule = () => getAxiosParsedUrl({ url: urls.getSchedule });
+
+const getActions = () => getAxiosParsedUrl({ url: urls.getActions });
+
+const getSupportedActions = () => getAxiosParsedUrl({ url: urls.getSupportedActions });
+
+const defineAction = ({ name, supportedAction, parameters }) => getAxiosParsedUrl({
+  url: urls.defineAction,
+  params: { name, supportedAction, parameters },
+});
+
+const scheduleAction = ({ name, timeToRun, dayOfWeek }) => getAxiosParsedUrl({
+  url: urls.scheduleAction,
+  params: { name, timeToRun, dayOfWeek },
+});
 
 export default {
   getSchedule,
   getActions,
   getSupportedActions,
-  createAction,
+  defineAction,
   scheduleAction,
 };

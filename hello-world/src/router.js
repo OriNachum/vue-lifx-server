@@ -43,5 +43,11 @@ export default new Router({
       props: true,
       component: () => import(/* webpackChunkName: "about" */ './views/Schedule/ScheduleAction.vue'),
     },
+    {
+      path: '/schedule/editSchedule',
+      name: 'editSchedule',
+      props: true,
+      component: () => import(/* webpackChunkName: "about" */ './views/Schedule/EditSchedule.vue'),
+    },
   ],
 });

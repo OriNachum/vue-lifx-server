@@ -4,7 +4,7 @@ import actionProviderApi from '@/services/actionProviderApi';
 
 Vue.use(Vuex);
 
-export const moduleName = 'schedulePage';
+export const moduleName = 'schedule';
 
 export const getters = {
   GET_SCHEDULE: 'GET_SCHEDULE',
@@ -14,6 +14,8 @@ export const getters = {
 
 export const actions = {
   INIT: 'INIT',
+  DEFINE_ACTION: 'DEFINE_ACTION',
+  SCHEDULE_ACTION: 'SCHEDULE_ACTION',
 };
 
 // getSchedule,
@@ -44,6 +46,20 @@ const actionsImpl = {
     actionProviderApi.getSupportedActions()
       .then((supportedActions) => {
         commit('setSupportedActions', supportedActions);
+      });
+  },
+  [actions.DEFINE_ACTION]: ({ commit }, { name, supportedAction, parameters }) => {
+    actionProviderApi.defineAction({ name, supportedAction, parameters })
+      .then((scheduleModel) => {
+        const { Actions } = scheduleModel;
+        // commit('setSchedule', Actions);
+      });
+  },
+  [actions.SCHEDULE_ACTION]: ({ commit }, { name, timeToRun, dayOfWeek }) => {
+    actionProviderApi.scheduleAction({ name, timeToRun, dayOfWeek })
+      .then((scheduleModel) => {
+        const { Actions } = scheduleModel;
+        // commit('setSchedule', Actions);
       });
   },
 };
