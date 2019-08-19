@@ -4,7 +4,8 @@
       <div class='supported-actions--word supported-actions--word__header'>
         SupportedActions:
       </div>
-      <div class='supported-actions--word supported-actions--word__item' v-for="supportedAction in getSupportedActions" :key="supportedAction">
+      <div class='supported-actions--word supported-actions--word__item'
+        v-for="supportedAction in getSupportedActions" :key="supportedAction">
         <router-link :to="{ name: 'defineAction', params: { supportedAction } }">
           {{ supportedAction }},
         </router-link>
@@ -14,7 +15,8 @@
       <span class='defined-actions--word defined-actions--word__header'>
         Defined Actions:
       </span>
-      <span class='defined-actions--word defined-actions--word__item' v-for="definedAction in getActions" :key="definedAction">
+      <span class='defined-actions--word defined-actions--word__item'
+        v-for="definedAction in getActions" :key="definedAction">
         <router-link :to="{ name: 'scheduleAction', params: { definedAction } }">
           {{ definedAction }},
         </router-link>
@@ -31,35 +33,27 @@
           </tr>
           </thead>
           <tbody class='table-body'>
-            <tr v-for="action in getSchedule" :key="action.id" class='table-body--row row'>
-              <!--<router-link :to="{ name: 'editSchedule', params: { action } }">-->
+            <tr class='table-body--row row'
+              v-for="action in getSchedule" :key="action.id"
+              @click="editScheduledAction(action)">
                 <td class='table-body--row row--column'>
-                  {{ action.Name }} 
+                  {{ action.Name }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.FullUrl }} 
+                  {{ action.FullUrl }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.Time }} 
+                  {{ action.Time }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.DayOfWeek }} 
+                  {{ action.DayOfWeek }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.Active }} 
+                  {{ action.Active }}
                 </td>
-              <!--</router-link>-->
             </tr>
           </tbody>
         </table>
-<!--
-      <ul>
-        <li class='schedule--item' v-for="action in getSchedule"> v-bind:action.>
-          
-          {{ action.Name }} {{ action.FullUrl }} {{ action.Time }} {{ action.DayOfWeek }} {{ action.Active }}
-        </li>
-        
-      </ul>-->
     </div>
   </div>
 </template>
@@ -81,20 +75,20 @@ export default {
       columns: [
         {
           id: 1,
-          name: 'Name'
+          name: 'Name',
         }, {
           id: 2,
-          name: 'FullUrl'
+          name: 'FullUrl',
         }, {
           id: 3,
-          name: 'Time'
+          name: 'Time',
         }, {
           id: 4,
-          name: 'DayOfWeek'
+          name: 'DayOfWeek',
         }, {
           id: 5,
-          name: 'Active'
-        }, 
+          name: 'Active',
+        },
       ],
     };
   },
@@ -110,7 +104,13 @@ export default {
   methods: {
     ...mapActions(moduleName, {
       init: actions.INIT,
-    }), 
+    }),
+    editScheduledAction(action) {
+      this.$router.push({
+        name: 'editSchedule',
+        params: { action },
+      });
+    },
   },
   mounted() {
     this.init();
@@ -135,23 +135,23 @@ export default {
       }
   }
   .defined-actions {
-      display: inline-flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      .defined-actions--word__header {
-        font-weight: 600;
-      }
-      .defined-actions--word {
-        padding-right: 1em;
-      }
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    .defined-actions--word__header {
+      font-weight: 600;
+    }
+    .defined-actions--word {
+      padding-right: 1em;
+    }
   }
   .schedule {
-      display: inline-flex;
-      flex-direction: column;
-      justify-content: center;
-      .row--column {
-        text-align: left;
-      }
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    .row--column {
+      text-align: left;
+    }
   }
 }
 </style>

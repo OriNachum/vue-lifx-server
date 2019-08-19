@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="app">
     <div id="nav" class="navbar">
-      <router-link class="navbar-link" to="/">Main Page</router-link>
-      <span class="navbar-space"></span>
-      <router-link class="navbar-link" to="/schedule">Schedule Page</router-link>
+      <router-link class="navbar--link" to="/">Main Page</router-link>
+      <span class="navbar--space"></span>
+      <router-link class="navbar--link" to="/schedule">Schedule Page</router-link>
       <!--<router-link to="/bulb/Television">BulbPage</router-link>-->
     </div>
     <router-view/>
@@ -30,10 +30,14 @@
 }
 
 .app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .navbar{
+    justify-content: center;
     display: inline-flex;
-
-    &-space {
+    flex-direction: row;
+    &--space {
       min-width: 1em;
     }
   }

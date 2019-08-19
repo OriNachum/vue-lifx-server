@@ -139,7 +139,8 @@ export default {
       // init: INIT,
     }),
     onInput(hue) {
-      this.setColor({hue, overtime});
+      const { overtime } = this;
+      this.setColor({ hue, overtime });
     },
     // Emitted when the user dismisses the color picker
     // (i.e. interacting with the middle color well).

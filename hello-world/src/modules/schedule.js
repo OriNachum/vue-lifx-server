@@ -16,6 +16,8 @@ export const actions = {
   INIT: 'INIT',
   DEFINE_ACTION: 'DEFINE_ACTION',
   SCHEDULE_ACTION: 'SCHEDULE_ACTION',
+  DELETE_SCHEDULED_ACTION: 'DELETE_SCHEDULED_ACTION',
+  MODIFY_SCHEDULED_ACTION: 'MODIFY_SCHEDULED_ACTION',
 };
 
 // getSchedule,
@@ -57,6 +59,20 @@ const actionsImpl = {
   },
   [actions.SCHEDULE_ACTION]: ({ commit }, { name, timeToRun, dayOfWeek }) => {
     actionProviderApi.scheduleAction({ name, timeToRun, dayOfWeek })
+      .then((scheduleModel) => {
+        const { Actions } = scheduleModel;
+        // commit('setSchedule', Actions);
+      });
+  },
+  [actions.DELETE_SCHEDULED_ACTION]: ({ commit }, { Id }) => {
+    actionProviderApi.deleteScheduledAction({ Id })
+      .then((scheduleModel) => {
+        const { Actions } = scheduleModel;
+        // commit('setSchedule', Actions);
+      });
+  },
+  [actions.MODIFY_SCHEDULED_ACTION]: ({ commit }, { action }) => {
+    actionProviderApi.modifyScheduledAction({ action })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
         // commit('setSchedule', Actions);

@@ -1,20 +1,26 @@
 <template>
-    <div class='edit-schedule'>
+  <div class='edit-schedule'>
     <div class='edit-schedule--header'>
-      Schedule action: {{ action }}
+      Edit action Id {{ action.Id }}
     </div>
     <div class='edit-schedule--form'>
-      <div class='form--name'>
-        Name: <input :model="name"/>
+      <div class='form--line'>
+        Defined action to perform: <input v-model="action.Name" />
       </div>
-      <div>
-        Time to run: <input :model="timeToRun" />
+      <div class='form--line'>
+        Time to run: <input v-model="action.Time" />
       </div>
-      <div>
-        Day of Week: <input :model="dayOfWeek" />
+      <div class='form--line'>
+        Day of Week: <input v-model="action.DayOfWeek" />
+      </div>
+      <div class='form--line'>
+        Is active: <input v-model="action.Active" />
       </div>
     </div>
-    <button @click="createAction(name, props)">Create action</button>
+    <div>
+      <button @click="deleteScheduledAction(action)">Delete action</button>
+      <button @click="modifyScheduledAction({ action })">Modify action</button>
+    </div>
   </div>
 </template>
 
@@ -23,7 +29,6 @@ import { mapGetters, mapActions } from 'vuex';
 
 import {
   moduleName,
-  getters,
   actions,
 } from '@/modules/schedule';
 
@@ -38,5 +43,40 @@ export default {
       dayOfWeek: '',
     };
   },
-}
+  computed: {
+    ...mapGetters(moduleName, {
+    }),
+  },
+  methods: {
+    ...mapActions(moduleName, {
+      deleteScheduledAction: actions.DELETE_SCHEDULED_ACTION,
+      modifyScheduledAction: actions.MODIFY_SCHEDULED_ACTION,
+    }),
+  },
+};
 </script>
+
+<style lang="scss">
+.edit-schedule {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &--header {
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  &--form {
+    display: inline;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .form--line {
+      padding-top: 0.1em;
+      padding-bottom: 0.1em;
+      text-align: left;
+    }
+  }
+}
+</style>

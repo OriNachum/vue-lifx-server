@@ -11,7 +11,10 @@
         Day of Week: <input v-model="dayOfWeek" />
       </div>
     </div>
-    <button @click="scheduleAction({ name: definedAction, timeToRun, dayOfWeek })">Schedule action</button>
+    <button
+      @click="scheduleAction({ name: definedAction, timeToRun, dayOfWeek })">
+      Schedule action
+    </button>
   </div>
 </template>
 
@@ -20,7 +23,6 @@ import { mapGetters, mapActions } from 'vuex';
 
 import {
   moduleName,
-  getters,
   actions,
 } from '@/modules/schedule';
 
@@ -43,7 +45,7 @@ export default {
   methods: {
     ...mapActions(moduleName, {
       scheduleAction: actions.SCHEDULE_ACTION,
-    }), 
+    }),
   },
 };
 

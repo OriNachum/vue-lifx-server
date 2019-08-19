@@ -20,7 +20,6 @@ import { mapGetters, mapActions } from 'vuex';
 
 import {
   moduleName,
-  getters,
   actions,
 } from '@/modules/schedule';
 
@@ -43,9 +42,9 @@ export default {
   methods: {
     ...mapActions(moduleName, {
       defineAction: actions.DEFINE_ACTION,
-    }), 
+    }),
   },
-}
+};
 </script>
 
 <style lang="scss">
