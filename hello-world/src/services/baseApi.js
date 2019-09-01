@@ -21,11 +21,14 @@ const httpsAgent = new https.Agent({
   passphrase: "YYY"
 })
 */
+axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 
-const hostname = 'ori';
+// const hostname = 'localhost';
+// const hostname = 'ori';
+const hostname = '10.0.0.7';
 
 const sites = {
-  dev: `https://${hostname}:44370`,
+  dev: `https://${hostname}:44306`,
   devIisDebug: `https://${hostname}:5001`,
   devIis: `https://${hostname}`,
 };
@@ -34,6 +37,8 @@ const { devIis: activeSite } = sites;
 
 const getAxiosParsedUrl = ({ url, params }) => {
   const result = axios.get(url, {
+    'sec-fetch-mode': 'navigate',
+    crossorigin: false,
     timeout: 60000,
     params,
     // httpsAgent,
