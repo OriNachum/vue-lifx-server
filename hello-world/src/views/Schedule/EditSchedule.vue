@@ -7,6 +7,12 @@
       <div class='form--line'>
         ActionId: <v-Select v-model="action.Name" :options="definedActions" ></v-Select>
       </div>
+      <div class='form--line' v-if="action.Parameters && action.Parameters.label">
+        Parameters: 
+        <div class='form--line line--parameters' v-for="parameter in Object.entries(action.Parameters)" :key="parameter[0]">
+          {{ parameter[0] }}: {{ parameter[1] }}
+        </div>
+      </div>
       <div class='form--line'>
         Time to run: <input v-model="action.Time" />
       </div>
@@ -90,6 +96,9 @@ export default {
       padding-top: 0.1em;
       padding-bottom: 0.1em;
       text-align: left;
+      .line--parameters {
+        margin-left:1em;
+      }
     }
   }
 }
