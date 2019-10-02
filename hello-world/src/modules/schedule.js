@@ -73,7 +73,9 @@ const actionsImpl = {
   },
   [actions.MODIFY_SCHEDULED_ACTION]: ({ commit }, { action }) => {
     const adaptedAction = { ...action };
-    adaptedAction.DaysOfWeek = adaptedAction.DaysOfWeek.split(',');
+    if (adaptedAction.DaysOfWeek && !Array.isArray(adaptedAction.DaysOfWeek)) {
+      adaptedAction.DaysOfWeek = adaptedAction.DaysOfWeek.split(',');
+    }
     actionProviderApi.modifyScheduledAction({ action: adaptedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
