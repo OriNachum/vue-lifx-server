@@ -11,7 +11,7 @@
         Time to run: <input v-model="action.Time" />
       </div>
       <div class='form--line'>
-        Day of Week: <input v-model="action.DayOfWeek" />
+        Days of Week: <input v-model="action.DaysOfWeek" />
       </div>
       <div class='form--line'>
         Is active: <input v-model="action.Active" />

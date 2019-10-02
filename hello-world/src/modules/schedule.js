@@ -72,7 +72,9 @@ const actionsImpl = {
       });
   },
   [actions.MODIFY_SCHEDULED_ACTION]: ({ commit }, { action }) => {
-    actionProviderApi.modifyScheduledAction({ action })
+    const adaptedAction = { ...action };
+    adaptedAction.DaysOfWeek = adaptedAction.DaysOfWeek.split(',');
+    actionProviderApi.modifyScheduledAction({ action: adaptedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
         // commit('setSchedule', Actions);

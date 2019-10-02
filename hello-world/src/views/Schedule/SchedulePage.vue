@@ -40,13 +40,13 @@
                   {{ action.Name }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.FullUrl }}
-                </td>
-                <td class='table-body--row row--column'>
                   {{ action.Time }}
                 </td>
                 <td class='table-body--row row--column'>
-                  {{ action.DayOfWeek }}
+                  {{ action.Date }} {{ action.DaysOfWeek }}
+                </td>
+                <td class='table-body--row row--column'>
+                  {{ action.Repeating }}
                 </td>
                 <td class='table-body--row row--column'>
                   {{ action.Active }}
@@ -78,13 +78,13 @@ export default {
           name: 'Name',
         }, {
           id: 2,
-          name: 'FullUrl',
-        }, {
-          id: 3,
           name: 'Time',
         }, {
+          id: 3,
+          name: 'Date/DaysOfWeek',
+        }, {
           id: 4,
-          name: 'DayOfWeek',
+          name: 'Repeating',
         }, {
           id: 5,
           name: 'Active',
