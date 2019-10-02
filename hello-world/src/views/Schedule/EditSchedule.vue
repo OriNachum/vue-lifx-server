@@ -1,17 +1,25 @@
 <template>
   <div class='edit-schedule'>
     <div class='edit-schedule--header'>
-      Edit action Id {{ action.Id }}
+      Edit action id {{ action.Id }} schedule
     </div>
     <div class='edit-schedule--form'>
       <div class='form--line'>
-        Defined action to perform: <input v-model="action.Name" />
+        ActionId: <v-Select v-model="action.Name" :options="definedActions" ></v-Select>
       </div>
       <div class='form--line'>
         Time to run: <input v-model="action.Time" />
       </div>
       <div class='form--line'>
-        Days of Week: <input v-model="action.DaysOfWeek" />
+        Days of week: 
+        <v-Select multiple v-model="action.DaysOfWeek" :options="['0','1','2','3','4','5','6']" ></v-Select>
+        <!--<input v-model="action.DaysOfWeek" />-->
+      </div>
+      <div class='form--line'>
+        Specific date: <input v-model="action.Date" />
+      </div>
+      <div class='form--line'>
+        Is repeating: <input v-model="action.Repeating" />
       </div>
       <div class='form--line'>
         Is active: <input v-model="action.Active" />
@@ -32,10 +40,16 @@ import {
   actions,
 } from '@/modules/schedule';
 
+import vSelect from 'vue-select';
+
 export default {
   name: 'editSchedule',
+  components: {
+    vSelect,
+  },
   props: {
     action: { },
+    definedActions: null,
   },
   data() {
     return {

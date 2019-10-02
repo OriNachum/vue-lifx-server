@@ -106,9 +106,10 @@ export default {
       init: actions.INIT,
     }),
     editScheduledAction(action) {
+      const definedActions = [...this.getActions];
       this.$router.push({
         name: 'editSchedule',
-        params: { action },
+        params: { action, definedActions },
       });
     },
   },
