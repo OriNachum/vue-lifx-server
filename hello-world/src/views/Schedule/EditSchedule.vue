@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import 'vue-select/dist/vue-select.css';
 import { mapGetters, mapActions } from 'vuex';
 
 import {
