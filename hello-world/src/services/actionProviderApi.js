@@ -25,9 +25,9 @@ const defineAction = ({ name, supportedAction, parameters }) => getAxiosParsedUr
   params: { name, supportedAction, parameters },
 });
 
-const scheduleAction = ({ name, timeToRun, dayOfWeek }) => getAxiosParsedUrl({
+const scheduleAction = ({ action }) => getAxiosParsedUrl({
   url: urls.scheduleAction,
-  params: { name, timeToRun, dayOfWeek },
+  params: { actionModel: action },
 });
 
 const deleteScheduledAction = ({ Id }) => getAxiosParsedUrl({

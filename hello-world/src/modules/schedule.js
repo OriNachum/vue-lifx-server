@@ -57,8 +57,8 @@ const actionsImpl = {
         // commit('setSchedule', Actions);
       });
   },
-  [actions.SCHEDULE_ACTION]: ({ commit }, { name, timeToRun, dayOfWeek }) => {
-    actionProviderApi.scheduleAction({ name, timeToRun, dayOfWeek })
+  [actions.SCHEDULE_ACTION]: ({ commit }, { action }) => {
+    actionProviderApi.scheduleAction({ action })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
         // commit('setSchedule', Actions);

@@ -23,6 +23,9 @@
 
       </span>
     </div>
+    <div class='schedule-page--add-new-item'>
+      <button @click="createScheduledAction()">+ Add schedule</button>
+    </div>
     <div class='schedule-page--schedule schedule'>
         <table :values="getSchedule" class='schedule--table'>
           <thead class='table-head'>
@@ -106,6 +109,14 @@ export default {
       init: actions.INIT,
     }),
     editScheduledAction(action) {
+      const definedActions = [...this.getActions];
+      this.$router.push({
+        name: 'editSchedule',
+        params: { action, definedActions },
+      });
+    },
+    createScheduledAction() {
+      const action = { };
       const definedActions = [...this.getActions];
       this.$router.push({
         name: 'editSchedule',

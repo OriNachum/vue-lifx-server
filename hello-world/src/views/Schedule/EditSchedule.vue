@@ -1,8 +1,12 @@
 <template>
   <div class='edit-schedule'>
-    <div class='edit-schedule--header'>
+    <div class='edit-schedule--header' v-if="action.Id">
       Edit action id {{ action.Id }} schedule
     </div>
+    <div class='edit-schedule--header' v-else>
+      Schedule action
+    </div>
+    
     <div class='edit-schedule--form'>
       <div class='form--line'>
         ActionId: <v-Select v-model="action.Name" :options="definedActions" ></v-Select>
@@ -31,9 +35,12 @@
         Is active: <input v-model="action.Active" />
       </div>
     </div>
-    <div>
-      <button @click="deleteScheduledAction(action)">Delete action</button>
+    <div v-if="action.Id">
       <button @click="modifyScheduledAction({ action })">Modify action</button>
+      <button @click="deleteScheduledAction(action)">Delete action</button>
+    </div>
+    <div v-else>
+      <button @click="scheduleAction({ action })">Create action</button>
     </div>
   </div>
 </template>
@@ -55,7 +62,8 @@ export default {
     vSelect,
   },
   props: {
-    action: { },
+    mode: 'new',
+    action: null,
     definedActions: null,
   },
   data() {
@@ -70,6 +78,7 @@ export default {
   },
   methods: {
     ...mapActions(moduleName, {
+      scheduleAction: actions.SCHEDULE_ACTION,
       deleteScheduledAction: actions.DELETE_SCHEDULED_ACTION,
       modifyScheduledAction: actions.MODIFY_SCHEDULED_ACTION,
     }),
