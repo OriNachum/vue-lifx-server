@@ -1,6 +1,6 @@
 <template>
   <div class='schedule-page'>
-    <div class='schedule-page--supported-actions supported-actions'>
+    <!-- <div class='schedule-page--supported-actions supported-actions'>
       <div class='supported-actions--word supported-actions--word__header'>
         SupportedActions:
       </div>
@@ -16,12 +16,16 @@
         Defined Actions:
       </span>
       <span class='defined-actions--word defined-actions--word__item'
-        v-for="definedAction in getActions" :key="definedAction">
+        v-for="definedAction in getActions" :key="definedAction.Name">
         <router-link :to="{ name: 'scheduleAction', params: { definedAction } }">
-          {{ definedAction }},
+          {{ definedAction.Name }},
         </router-link>
-
       </span>
+    </div> -->
+    <div class='schedule-page--add-new-item'>
+      <button @click="defineAction()">
+        + Define Action
+      </button>
     </div>
     <div class='schedule-page--add-new-item'>
       <button @click="createScheduledAction()">+ Add schedule</button>
@@ -108,6 +112,19 @@ export default {
     ...mapActions(moduleName, {
       init: actions.INIT,
     }),
+    defineAction() {
+      const definedAction = {
+        Name: '',
+        Service: '',
+        ActionId: '',
+        Parameters: [['label1', 'helloWorld1']],
+      };
+      const supportedActions = this.getSupportedActions;
+      this.$router.push({
+        name: 'defineAction',
+        params: { definedAction, supportedActions },
+      });
+    },
     editScheduledAction(action) {
       const definedActions = [...this.getActions];
       this.$router.push({
@@ -118,9 +135,11 @@ export default {
     createScheduledAction() {
       const action = { };
       const definedActions = [...this.getActions];
+      const supportedActions = this.getSupportedActions;
+
       this.$router.push({
         name: 'editSchedule',
-        params: { action, definedActions },
+        params: { action, definedActions, supportedActions },
       });
     },
   },

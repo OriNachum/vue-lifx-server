@@ -50,15 +50,39 @@ const actionsImpl = {
         commit('setSupportedActions', supportedActions);
       });
   },
-  [actions.DEFINE_ACTION]: ({ commit }, { name, supportedAction, parameters }) => {
-    actionProviderApi.defineAction({ name, supportedAction, parameters })
+  [actions.DEFINE_ACTION]: ({ commit }, {
+    ActionId, Name, Parameters, Service,
+  }) => {
+    // const model = {
+    //   Name,
+    //   Service,
+    //   ActionId,
+    //   Parameters: { },
+    // };
+    const model = { Parameters: { } };
+    Parameters.forEach((x) => {
+      const parameterName = x[0];
+      const parameterValue = x[1];
+      model.Parameters[parameterName] = parameterValue;
+    });
+    actionProviderApi.defineAction({
+      actionId: ActionId, name: Name, parameters: JSON.stringify(model.Parameters), service: Service,
+    })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
         // commit('setSchedule', Actions);
       });
   },
   [actions.SCHEDULE_ACTION]: ({ commit }, { action }) => {
-    actionProviderApi.scheduleAction({ action })
+    const parsedAction = { ...action };
+    const parameters = { };
+    parsedAction.Parameters.forEach((x) => {
+      const parameterName = x[0];
+      const parameterValue = x[1];
+      parameters[parameterName] = parameterValue;
+    });
+    parsedAction.Parameters = parameters;
+    actionProviderApi.scheduleAction({ action: parsedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
         // commit('setSchedule', Actions);

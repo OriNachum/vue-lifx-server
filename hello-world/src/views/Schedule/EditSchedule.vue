@@ -1,6 +1,6 @@
 <template>
   <div class='edit-schedule'>
-    <div class='edit-schedule--header' v-if="action.Id">
+    <div class='edit-schedule--header' v-if="action && action.Id">
       Edit action id {{ action.Id }} schedule
     </div>
     <div class='edit-schedule--header' v-else>
@@ -8,14 +8,21 @@
     </div>
     
     <div class='edit-schedule--form'>
-      <div class='form--line'>
+      <!-- <div class='form--line'>
         ActionId: <v-Select v-model="action.Name" :options="definedActions" ></v-Select>
-      </div>
-      <div class='form--line' v-if="action.Parameters && action.Parameters.label">
+      </div> -->
+      <!-- Refactor to a component and use in both defineAction and EditSchedule -->
+      <!-- <div class='form--line' v-if="action.Parameters && action.Parameters.label">
         Parameters: 
         <div class='form--line line--parameters' v-for="parameter in Object.entries(action.Parameters)" :key="parameter[0]">
           {{ parameter[0] }}: {{ parameter[1] }}
         </div>
+      </div> -->
+      <div class='form--line'>
+        <action-definition :supportedActions="supportedActions"
+        :definedActions="definedActions"
+        :actionDefinition="action"
+        :readonly="true"></action-definition>
       </div>
       <div class='form--line'>
         Time to run: <input v-model="action.Time" />
@@ -29,10 +36,10 @@
         Specific date: <input v-model="action.Date" />
       </div>
       <div class='form--line'>
-        Is repeating: <input v-model="action.Repeating" />
+        Is repeating: <toggle-button v-model="action.Repeating"></toggle-button>
       </div>
       <div class='form--line'>
-        Is active: <input v-model="action.Active" />
+        Is active: <toggle-button v-model="action.Active"></toggle-button>
       </div>
     </div>
     <div v-if="action.Id">
@@ -55,16 +62,21 @@ import {
 } from '@/modules/schedule';
 
 import vSelect from 'vue-select';
+import { ToggleButton } from 'vue-js-toggle-button'; 
+import ActionDefinition from '@/components/ActionDefinition.vue';
 
 export default {
   name: 'editSchedule',
   components: {
     vSelect,
+    ToggleButton,
+    ActionDefinition,
   },
   props: {
     mode: 'new',
     action: null,
-    definedActions: null,
+    supportedActions: Object,
+    definedActions: Array,
   },
   data() {
     return {
@@ -106,9 +118,6 @@ export default {
       padding-top: 0.1em;
       padding-bottom: 0.1em;
       text-align: left;
-      .line--parameters {
-        margin-left:1em;
-      }
     }
   }
 }

@@ -20,9 +20,13 @@ const getActions = () => getAxiosParsedUrl({ url: urls.getActions });
 
 const getSupportedActions = () => getAxiosParsedUrl({ url: urls.getSupportedActions });
 
-const defineAction = ({ name, supportedAction, parameters }) => getAxiosParsedUrl({
+const defineAction = ({
+  actionId, name, parameters, service,
+}) => getAxiosParsedUrl({
   url: urls.defineAction,
-  params: { name, supportedAction, parameters },
+  params: {
+    actionId, name, parameters, service,
+  },
 });
 
 const scheduleAction = ({ action }) => getAxiosParsedUrl({

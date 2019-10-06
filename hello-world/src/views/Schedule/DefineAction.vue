@@ -1,6 +1,7 @@
 <template>
   <div class='define-action'>
-    <div class='define-action--header'>
+    <action-definition :actionDefinition="definedAction" :supportedActions="supportedActions"></action-definition>
+    <!-- <div class='define-action--header'>
       Define action for: {{ supportedAction }}
     </div>
     <div class='define-action--form'>
@@ -10,23 +11,32 @@
       <div>
         Parameters: <input v-model="parameters" />
       </div>
-    </div>
-    <button @click="defineAction({ name, supportedAction, parameters })">Define action</button>
+    </div> -->
+    <button @click="defineAction(definedAction)">Define action</button>
   </div>
 </template>
 
 <script>
+import 'vue-select/dist/vue-select.css';
 import { mapGetters, mapActions } from 'vuex';
+import ActionDefinition from '@/components/ActionDefinition.vue';
 
 import {
   moduleName,
   actions,
 } from '@/modules/schedule';
 
+import vSelect from 'vue-select';
+
 export default {
   name: 'defineAction',
+  components: {
+    vSelect,
+    ActionDefinition,
+  },
   props: {
-    supportedAction: '',
+    definedAction: Object,
+    supportedActions: Object,
   },
   data() {
     return {
