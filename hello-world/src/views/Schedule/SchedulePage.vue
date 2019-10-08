@@ -1,27 +1,5 @@
 <template>
   <div class='schedule-page'>
-    <!-- <div class='schedule-page--supported-actions supported-actions'>
-      <div class='supported-actions--word supported-actions--word__header'>
-        SupportedActions:
-      </div>
-      <div class='supported-actions--word supported-actions--word__item'
-        v-for="supportedAction in getSupportedActions" :key="supportedAction">
-        <router-link :to="{ name: 'defineAction', params: { supportedAction } }">
-          {{ supportedAction }},
-        </router-link>
-      </div>
-    </div>
-    <div class='schedule-page--defined-actions defined-actions'>
-      <span class='defined-actions--word defined-actions--word__header'>
-        Defined Actions:
-      </span>
-      <span class='defined-actions--word defined-actions--word__item'
-        v-for="definedAction in getActions" :key="definedAction.Name">
-        <router-link :to="{ name: 'scheduleAction', params: { definedAction } }">
-          {{ definedAction.Name }},
-        </router-link>
-      </span>
-    </div> -->
     <div class='schedule-page--add-new-item'>
       <button @click="defineAction()">
         + Define Action

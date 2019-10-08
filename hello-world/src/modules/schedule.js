@@ -37,6 +37,10 @@ const actionsImpl = {
     actionProviderApi.getSchedule()
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
+        Actions.forEach((x) => {
+          x.Parameters = Object.entries(x.Parameters);
+        });
+
         commit('setSchedule', Actions);
       });
 

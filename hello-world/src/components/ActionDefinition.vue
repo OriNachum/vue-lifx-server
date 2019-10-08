@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-if="readonly">
-      <div class='action-definition action-definition--parameters' v-if="actionDefinition.Parameters && actionDefinition.Parameters.count() > 0">
+      <div class='action-definition action-definition--parameters' v-if="actionDefinition.Parameters && actionDefinition.Parameters.length > 0">
         Parameters: 
         <div class='action-definition--parameters parameters--parameter' v-for="parameter in this.actionDefinition.Parameters" :key="parameter[0]">
           {{ parameter[0] }}: {{ parameter[1] }}
