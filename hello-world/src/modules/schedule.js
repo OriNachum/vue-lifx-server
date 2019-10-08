@@ -104,6 +104,14 @@ const actionsImpl = {
     if (adaptedAction.DaysOfWeek && !Array.isArray(adaptedAction.DaysOfWeek)) {
       adaptedAction.DaysOfWeek = adaptedAction.DaysOfWeek.split(',');
     }
+    const Parameters = { };
+    adaptedAction.Parameters.forEach((x) => {
+      const parameterName = x[0];
+      const parameterValue = x[1];
+      Parameters[parameterName] = parameterValue;
+    });
+    adaptedAction.Parameters = Parameters;
+
     actionProviderApi.modifyScheduledAction({ action: adaptedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
