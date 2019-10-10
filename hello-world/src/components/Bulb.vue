@@ -1,6 +1,8 @@
 <template>
 <div class='bulb'>
   <p>
+    <font-awesome-icon :icon="getBulbIconState"></font-awesome-icon>
+    <font-awesome-icon :icon="['far', 'lightbulb']"></font-awesome-icon>
     label: {{ bulb.label }}; address: {{ bulb.address }}
   </p>
 </div>
@@ -31,6 +33,15 @@ export default {
       },
       */
     };
+  },
+  computed: {
+    getBulbIconState() {
+      let iconState = 'fas';
+      if (this.bulb.Power.Value == 0) {
+        iconState = 'far';
+      }
+      return [iconState, 'lightbulb'];
+    },
   },
 };
 // Put here how to design each light in a page
