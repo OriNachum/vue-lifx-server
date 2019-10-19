@@ -31,7 +31,12 @@ export const moduleName = 'bulbPage';
 
 const moduleState = {
   debugInfo: '',
-  bulb: '',
+  bulb: {
+    hue: 50,
+    saturation: 50,
+    luminosity: 50,
+    alhpa: 1,
+  },
   color: {
     hue: 50,
     saturation: 50,
@@ -50,7 +55,7 @@ const gettersImpl = {
   [getters.GET_TEMPERATURE]: state => state.bulb.temperature,
   [getters.GET_HUE]: state => state.bulb.hue,
   [getters.GET_SATURATION]: state => state.bulb.saturation * 100,
-  [getters.GET_COLOR]: state => state.color,
+  [getters.GET_COLOR]: state => state.bulb,
 
   [getters.IS_BULB_DEFINED]: (state) => {
     if (state.bulb) {
@@ -68,12 +73,12 @@ const actionsImpl = {
   },
 
   [actions.SET_BRIGHTNESS]: ({ commit, state }, { brightness, overtime }) => {
-    const { color } = state;
-    const { brightness: currentBrightness } = color;
+    const { bulb } = state;
+    const { brightness: currentBrightness } = bulb;
     if (`${brightness}` !== `${currentBrightness}`) {
       commit('setBrightness', brightness);
       commit('setLoading', { loading: true });
-      const { bulb } = state;
+      // const { bulb } = state;
       const { label } = bulb;
 
       lifxClientApi.setBrightnessAsync({ label, brightness, overtime })
@@ -87,12 +92,12 @@ const actionsImpl = {
     }
   },
   [actions.SET_TEMPERATURE]: ({ commit, state }, { temperature, overtime }) => {
-    const { color } = state;
-    const { temperature: currentTemperature } = color;
+    const { bulb } = state;
+    const { temperature: currentTemperature } = bulb;
     if (`${temperature}` !== `${currentTemperature}`) {
       commit('setTemperature', temperature);
       commit('setLoading', { loading: true });
-      const { bulb } = state;
+      // const { bulb } = state;
       const { label } = bulb;
       lifxClientApi.setTemperatureAsync({ label, temperature, overtime })
         .then((response) => {
@@ -106,13 +111,13 @@ const actionsImpl = {
   },
 
   [actions.SET_COLOR]: ({ commit, state }, { hue, overtime }) => {
-    const { color } = state;
-    const { hue: currentHue } = color;
+    const { bulb } = state;
+    const { hue: currentHue } = bulb;
     if (`${hue}` !== `${currentHue}`) {
       commit('setHue', hue);
 
       commit('setLoading', { loading: true });
-      const { bulb, saturation } = state;
+      const { /* bulb, */ saturation } = state;
       const { label } = bulb;
       lifxClientApi.setColorAsync({
         label,
@@ -131,15 +136,15 @@ const actionsImpl = {
   },
 
   [actions.SET_HUE]: ({ commit, state }, hue) => {
-    const { color } = state;
-    const { hue: currentHue } = color;
+    const { bulb } = state;
+    const { hue: currentHue } = bulb;
     if (`${hue}` !== `${currentHue}`) {
       commit('setHue', hue);
     }
   },
   [actions.SET_SATURATION]: ({ commit, state }, saturation) => {
-    const { color } = state;
-    const { saturation: currentSaturation } = color;
+    const { bulb } = state;
+    const { saturation: currentSaturation } = bulb;
     if (`${saturation}` !== `${currentSaturation}`) {
       commit('setSaturation', saturation);
     }
@@ -184,7 +189,7 @@ const actionsImpl = {
 
 const mutations = {
   setBulb(state, { bulb }) {
-    Vue.set(state, 'bulb', bulb);
+    Vue.set(state, 'bulb', { ...state.bulb, ...bulb });
   },
   resetBulbs(state, { bulbs }) {
     Vue.set(state, 'bulbs', bulbs);
@@ -199,16 +204,16 @@ const mutations = {
     Vue.set(state.bulb, 'power', power);
   },
   setHue(state, hue) {
-    Vue.set(state.color, 'hue', hue);
+    Vue.set(state.bulb, 'hue', hue);
   },
   setBrightness(state, brightness) {
-    Vue.set(state.color, 'brightness', brightness);
+    Vue.set(state.bulb, 'brightness', brightness);
   },
   setSaturation(state, saturation) {
-    Vue.set(state.color, 'saturation', saturation);
+    Vue.set(state.bulb, 'saturation', saturation);
   },
   setTemperature(state, temperature) {
-    Vue.set(state.color, 'temperature', temperature);
+    Vue.set(state.bulb, 'temperature', temperature);
   },
 };
 
