@@ -1,13 +1,31 @@
 <template>
 <div class='bulb'>
   <p>
-    <font-awesome-icon :icon="getBulbIconState"></font-awesome-icon>
-    label: {{ bulb.label }}; address: {{ bulb.address }}
+    <dev class='bulb__toggle-icon' @click="toggleBulb(bulb)">
+      <font-awesome-icon :icon="getBulbIconState"></font-awesome-icon>
+    </dev>
+    <dev class='bulb__text' @click="routeToBulbPage(bulb)">
+      <!--<router-link :to="{ name: 'bulb', params: { bulb } }">-->
+        label: {{ bulb.label }}; address: {{ bulb.address }}
+      <!--</router-link>-->
+    </dev>
   </p>
 </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
+import {
+  moduleName,
+  REFRESH_BULBS,
+  GET_BULBS,
+  GET_LOADING,
+  TOGGLE_BULB,
+  GET_LAST_ACTION_RESPONSE,
+} from '@/modules/mainPage';
+
+
 export default {
   name: 'bulb',
   props: {
@@ -33,13 +51,37 @@ export default {
       */
     };
   },
+
   computed: {
+    ...mapGetters(moduleName, {
+      getBulbs: GET_BULBS,
+      loading: GET_LOADING,
+      getLastActionResponse: GET_LAST_ACTION_RESPONSE,
+    }),
+  },
+  methods: {
+    ...mapActions(moduleName, {
+      toggleBulb: TOGGLE_BULB,
+      // init: INIT,
+    }),
     getBulbIconState() {
       let iconState = 'fas';
       if (this.bulb.power) {
         iconState = 'far';
       }
       return [iconState, 'lightbulb'];
+    },
+    showError: () => this && this.computed
+      && this.computed.getLastActionResponse().responseType !== 0
+      && (this.computed.getLastActionResponse().responseData),
+    routeToBulbPage(bulb) {
+      this.$router.push({
+        name: 'bulb',
+        params: { bulb },
+      });
+      // const routeData =
+      //  this.$router.resolve({ name: 'bulbPage', component: BulbPage, params: { bulb } });
+      // window.open(routeData.href, '_blank');
     },
   },
 };
