@@ -56,7 +56,8 @@ const actions = {
     const { label } = bulb;
     lifxClientApi.toggleBulbAsync(label)
       .then((response) => {
-        const { responseType, responseData } = response;
+        const { responseType, responseData, bulbs } = response;
+        commit('resetBulbs', { bulbs });
         commit('setLastActionResponse', { responseType, responseData });
       }).finally(() => {
         commit('setLoading', { loading: false });
