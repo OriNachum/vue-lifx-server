@@ -88,10 +88,11 @@ export default {
 // Put here how to design each light in a page
 </script>
 
-<style>
-
-.bulb__toggle-icon:hover {
-  cursor: pointer;
+<style lang="scss">
+.bulb {
+  &__toggle-icon:hover {
+    cursor: pointer;
+  }
 }
 
 </style>
