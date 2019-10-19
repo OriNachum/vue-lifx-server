@@ -75,16 +75,15 @@ const actionsImpl = {
       commit('setLoading', { loading: true });
       const { bulb } = state;
       const { label } = bulb;
-      if (bulb.power) {
-        lifxClientApi.setBrightnessAsync({ label, brightness, overtime })
-          .then((response) => {
-            const { responseType, responseData, bulb: newBulbState } = response;
-            commit('setBulb', { bulb: newBulbState });
-            commit('setLastActionResponse', { responseType, responseData });
-          }).finally(() => {
-            commit('setLoading', { loading: false });
-          });
-      }
+
+      lifxClientApi.setBrightnessAsync({ label, brightness, overtime })
+        .then((response) => {
+          const { responseType, responseData, bulb: newBulbState } = response;
+          commit('setBulb', { bulb: newBulbState });
+          commit('setLastActionResponse', { responseType, responseData });
+        }).finally(() => {
+          commit('setLoading', { loading: false });
+        });
     }
   },
   [actions.SET_TEMPERATURE]: ({ commit, state }, { temperature, overtime }) => {
@@ -95,16 +94,14 @@ const actionsImpl = {
       commit('setLoading', { loading: true });
       const { bulb } = state;
       const { label } = bulb;
-      if (bulb.power) {
-        lifxClientApi.setTemperatureAsync({ label, temperature, overtime })
-          .then((response) => {
-            const { responseType, responseData, bulb: newBulbState } = response;
-            commit('setBulb', { bulb: newBulbState });
-            commit('setLastActionResponse', { responseType, responseData });
-          }).finally(() => {
-            commit('setLoading', { loading: false });
-          });
-      }
+      lifxClientApi.setTemperatureAsync({ label, temperature, overtime })
+        .then((response) => {
+          const { responseType, responseData, bulb: newBulbState } = response;
+          commit('setBulb', { bulb: newBulbState });
+          commit('setLastActionResponse', { responseType, responseData });
+        }).finally(() => {
+          commit('setLoading', { loading: false });
+        });
     }
   },
 
@@ -117,21 +114,19 @@ const actionsImpl = {
       commit('setLoading', { loading: true });
       const { bulb, saturation } = state;
       const { label } = bulb;
-      if (bulb.power) {
-        lifxClientApi.setColorAsync({
-          label,
-          saturation,
-          hue,
-          overtime,
-        })
-          .then((response) => {
-            const { responseType, responseData, bulb: newBulbState } = response;
-            commit('setBulb', { bulb: newBulbState });
-            commit('setLastActionResponse', { responseType, responseData });
-          }).finally(() => {
-            commit('setLoading', { loading: false });
-          });
-      }
+      lifxClientApi.setColorAsync({
+        label,
+        saturation,
+        hue,
+        overtime,
+      })
+        .then((response) => {
+          const { responseType, responseData, bulb: newBulbState } = response;
+          commit('setBulb', { bulb: newBulbState });
+          commit('setLastActionResponse', { responseType, responseData });
+        }).finally(() => {
+          commit('setLoading', { loading: false });
+        });
     }
   },
 
