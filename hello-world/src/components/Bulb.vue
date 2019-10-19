@@ -1,14 +1,14 @@
 <template>
 <div class='bulb'>
   <p>
-    <dev class='bulb__toggle-icon' @click="toggleBulb(bulb)">
+    <div class='bulb__toggle-icon' @click="toggleBulb(bulb)">
       <font-awesome-icon :icon="getBulbIconState"></font-awesome-icon>
-    </dev>
-    <dev class='bulb__text' @click="routeToBulbPage(bulb)">
+    </div>
+    <div class='bulb__text' @click="routeToBulbPage(bulb)">
       <!--<router-link :to="{ name: 'bulb', params: { bulb } }">-->
         label: {{ bulb.label }}; address: {{ bulb.address }}
       <!--</router-link>-->
-    </dev>
+    </div>
   </p>
 </div>
 </template>
