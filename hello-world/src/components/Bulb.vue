@@ -58,12 +58,6 @@ export default {
       loading: GET_LOADING,
       getLastActionResponse: GET_LAST_ACTION_RESPONSE,
     }),
-  },
-  methods: {
-    ...mapActions(moduleName, {
-      toggleBulb: TOGGLE_BULB,
-      // init: INIT,
-    }),
     getBulbIconState() {
       let iconState = 'fas';
       if (this.bulb.power) {
@@ -71,6 +65,12 @@ export default {
       }
       return [iconState, 'lightbulb'];
     },
+  },
+  methods: {
+    ...mapActions(moduleName, {
+      toggleBulb: TOGGLE_BULB,
+      // init: INIT,
+    }),
     showError: () => this && this.computed
       && this.computed.getLastActionResponse().responseType !== 0
       && (this.computed.getLastActionResponse().responseData),
