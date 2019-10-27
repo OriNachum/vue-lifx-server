@@ -25,6 +25,7 @@ export const actions = {
   SET_BRIGHTNESS: 'SET_BRIGHTNESS',
   SET_SATURATION: 'SET_SATURATION',
   SET_TEMPERATURE: 'SET_TEMPERATURE',
+  SET_COLOR: 'SET_COLOR',
 };
 
 export const moduleName = 'bulbPage';
@@ -32,7 +33,7 @@ export const moduleName = 'bulbPage';
 const moduleState = {
   debugInfo: '',
   bulb: {
-    hue: 50,
+    hue: '50',
     saturation: 50,
     luminosity: 50,
     alhpa: 1,
@@ -54,7 +55,7 @@ const gettersImpl = {
   [getters.GET_BRIGHTNESS]: state => state.bulb.brightness * 100,
   [getters.GET_TEMPERATURE]: state => state.bulb.temperature,
   [getters.GET_HUE]: state => state.bulb.hue,
-  [getters.GET_SATURATION]: state => state.bulb.saturation * 100,
+  [getters.GET_SATURATION]: state => state.bulb.saturation,
   [getters.GET_COLOR]: state => state.bulb,
 
   [getters.IS_BULB_DEFINED]: (state) => {
@@ -115,24 +116,24 @@ const actionsImpl = {
     const { hue: currentHue } = bulb;
     if (`${hue}` !== `${currentHue}`) {
       commit('setHue', hue);
-
-      commit('setLoading', { loading: true });
-      const { /* bulb, */ saturation } = state;
-      const { label } = bulb;
-      lifxClientApi.setColorAsync({
-        label,
-        saturation,
-        hue,
-        overtime,
-      })
-        .then((response) => {
-          const { responseType, responseData, bulb: newBulbState } = response;
-          commit('setBulb', { bulb: newBulbState });
-          commit('setLastActionResponse', { responseType, responseData });
-        }).finally(() => {
-          commit('setLoading', { loading: false });
-        });
     }
+
+    commit('setLoading', { loading: true });
+    const { saturation } = bulb;
+    const { label } = bulb;
+    lifxClientApi.setColorAsync({
+      label,
+      saturation: saturation / 100,
+      hue: `${hue}`.split('.')[0],
+      overtime,
+    })
+      .then((response) => {
+        const { responseType, responseData, bulb: newBulbState } = response;
+        commit('setBulb', { bulb: newBulbState });
+        commit('setLastActionResponse', { responseType, responseData });
+      }).finally(() => {
+        commit('setLoading', { loading: false });
+      });
   },
 
   [actions.SET_HUE]: ({ commit, state }, hue) => {
@@ -146,7 +147,7 @@ const actionsImpl = {
     const { bulb } = state;
     const { saturation: currentSaturation } = bulb;
     if (`${saturation}` !== `${currentSaturation}`) {
-      commit('setSaturation', saturation);
+      commit('setSaturation', `${saturation}`);
     }
   },
 
