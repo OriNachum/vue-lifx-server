@@ -37,11 +37,13 @@ const actionsImpl = {
     actionProviderApi.getSchedule()
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
+        const parsedActions = [];
         Actions.forEach((x) => {
-          x.Parameters = Object.entries(x.Parameters);
+          const action = { Parameters: Object.entries(x.Parameters) };
+          parsedActions.push(action);
         });
 
-        commit('setSchedule', Actions);
+        commit('setSchedule', parsedActions);
       });
 
     actionProviderApi.getActions()
@@ -70,11 +72,14 @@ const actionsImpl = {
       model.Parameters[parameterName] = parameterValue;
     });
     actionProviderApi.defineAction({
-      actionId: ActionId, name: Name, parameters: JSON.stringify(model.Parameters), service: Service,
+      actionId: ActionId,
+      name: Name,
+      parameters: JSON.stringify(model.Parameters),
+      service: Service,
     })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
-        // commit('setSchedule', Actions);
+        commit('setSchedule', Actions);
       });
   },
   [actions.SCHEDULE_ACTION]: ({ commit }, { action }) => {
@@ -89,14 +94,14 @@ const actionsImpl = {
     actionProviderApi.scheduleAction({ action: parsedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
-        // commit('setSchedule', Actions);
+        commit('setSchedule', Actions);
       });
   },
   [actions.DELETE_SCHEDULED_ACTION]: ({ commit }, { Id }) => {
     actionProviderApi.deleteScheduledAction({ Id })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
-        // commit('setSchedule', Actions);
+        commit('setSchedule', Actions);
       });
   },
   [actions.MODIFY_SCHEDULED_ACTION]: ({ commit }, { action }) => {
@@ -115,7 +120,7 @@ const actionsImpl = {
     actionProviderApi.modifyScheduledAction({ action: adaptedAction })
       .then((scheduleModel) => {
         const { Actions } = scheduleModel;
-        // commit('setSchedule', Actions);
+        commit('setSchedule', Actions);
       });
   },
 };
