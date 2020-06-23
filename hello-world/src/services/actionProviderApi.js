@@ -1,8 +1,13 @@
 import baseApi from './baseApi';
 
-const { activeSite, getAxiosParsedUrl } = baseApi;
-const controllerPath = 'ActionService/api/Action';
-// const controllerPath = 'api/Action';
+
+// const { activeSite, getAxiosParsedUrl } = baseApi;
+const port = 5021;
+const activeSite = `${baseApi.activeSite}:${port}`;
+const { getAxiosParsedUrl } = baseApi;
+
+// const controllerPath = 'ActionService/api/Action';
+const controllerPath = 'api/Action';
 
 const urls = {
   getSchedule: `${activeSite}/${controllerPath}/GetSchedule`,

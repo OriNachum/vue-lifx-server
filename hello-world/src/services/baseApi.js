@@ -25,15 +25,17 @@ axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 
 // const hostname = 'localhost';
 // const hostname = 'ori';
-const hostname = '10.0.0.7';
+// const hostname = '10.0.0.7';
+const hostname = '192.168.1.24';
 
 const sites = {
   dev: `https://${hostname}:44306`,
   devIisDebug: `https://${hostname}:5001`,
   devIis: `https://${hostname}`,
+  raspberryPiOs: `http://${hostname}`,
 };
 
-const { devIis: activeSite } = sites;
+const { raspberryPiOs: activeSite } = sites;
 
 const getAxiosParsedUrl = ({ url, params }) => {
   const result = axios.get(url, {

@@ -1,9 +1,11 @@
 import axios from 'axios';
 import baseApi from './baseApi';
 
-const { activeSite } = baseApi;
-const controllerPath = 'LifxWebApi/Lifx/Api';
-
+// const { activeSite } = baseApi;
+const port = 5011;
+const activeSite = `${baseApi.activeSite}:${port}`;
+// const controllerPath = 'LifxWebApi/Lifx/Api';
+const controllerPath = 'Lifx/Api';
 const urls = {
   getBulbs: `${activeSite}/${controllerPath}/GetBulbs`,
   reset: `${activeSite}/${controllerPath}/Reset`,
